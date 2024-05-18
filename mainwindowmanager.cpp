@@ -1,7 +1,7 @@
 #include "mainwindowmanager.h"
 #include "ui_mainwindowmanager.h"
 
-MainWindowManager::MainWindowManager(QWidget *parent)
+MainWindowManager::MainWindowManager(QSqlDatabase database, QWidget *parent)
    : QMainWindow(parent)
    , ui(new Ui::MainWindowManager)
 {

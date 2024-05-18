@@ -1,6 +1,5 @@
 #include "loginwindow.h"
 #include "./ui_loginwindow.h"
-#include <QMessageBox>
 
 LoginWindow::LoginWindow(QWidget *parent)
    : QDialog(parent)
@@ -22,33 +21,41 @@ LoginWindow::~LoginWindow()
 
 void LoginWindow::on_signin_clicked()
 {
-   QString login       = ui->login->text();
-   QString password    = ui->password->text();
-   int     permissions = 0;
+   QString   login       = ui->login->text();
+   QString   password    = ui->password->text();
+   int       permissions = 0;
+   QSqlQuery account;
 
-   if (login == "admin" && password == "admin")
+   account.prepare("SELECT password, perms FROM Users WHERE login = :login");
+
+   account.bindValue(":login", login);
+   account.exec();
+   if (account.next())
    {
-      QMessageBox::information(this, "Успех", "Добрый день, " + login);
-      switch (permissions)
+      if (password == account.value(0).toString())
       {
-      case 0:
-         main_window = new MainWindowManager(this);
-         break;
+         permissions = account.value(1).toInt();
+         QMessageBox::information(this, "Успех", "Добрый день, " + login);
+         switch (permissions)
+         {
+         case 0:
+            main_window = new MainWindowManager(db);
+            break;
 
-      case 1:
-         main_window = new MainWindowWarehouse(this);
-         break;
+         case 1:
+            //main_window = new MainWindowWarehouse(db);
+            break;
 
-      case 2:
-         main_window = new MainWindowClient(this);
-         break;
-      }
-      if (main_window)
-      {
-         main_window->setAttribute(Qt::WA_DeleteOnClose);
-         connect(main_window, &QMainWindow::destroyed, this, &QWidget::close);
-         hide();
-         main_window->show();
+         case 2:
+            main_window = new MainWindowClient(db);
+            break;
+         }
+         if (main_window)
+         {
+            //hide();
+            main_window->show();
+            close();
+         }
       }
    }
    else

@@ -2,6 +2,8 @@
 #define LOGINWINDOW_H
 
 #include <QDialog>
+#include <QMainWindow>
+#include <QMessageBox>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -33,9 +35,6 @@ private slots:
 
 private:
    Ui::LoginWindow *ui;
-   //MainWindowClient *main_window_client       = NULL;
-   //MainWindowManager *main_window_manager     = NULL;
-   //MainWindowWarehouse *main_window_warehouse = NULL;
    QMainWindow *main_window = nullptr;
    QSqlDatabase db;
 };
