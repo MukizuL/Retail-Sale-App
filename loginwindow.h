@@ -33,9 +33,10 @@ private slots:
 
 private:
    Ui::LoginWindow *ui;
-   MainWindowClient *main_window_client       = NULL;
-   MainWindowManager *main_window_manager     = NULL;
-   MainWindowWarehouse *main_window_warehouse = NULL;
+   //MainWindowClient *main_window_client       = NULL;
+   //MainWindowManager *main_window_manager     = NULL;
+   //MainWindowWarehouse *main_window_warehouse = NULL;
+   QMainWindow *main_window = nullptr;
    QSqlDatabase db;
 };
 #endif // LOGINWINDOW_H

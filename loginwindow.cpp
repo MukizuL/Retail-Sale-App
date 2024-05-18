@@ -13,17 +13,9 @@ LoginWindow::LoginWindow(QWidget *parent)
 LoginWindow::~LoginWindow()
 {
    delete ui;
-   if (main_window_warehouse)
+   if (main_window == nullptr)
    {
-      delete main_window_warehouse;
-   }
-   if (main_window_client)
-   {
-      delete main_window_client;
-   }
-   if (main_window_manager)
-   {
-      delete main_window_manager;
+      delete main_window;
    }
    db.removeDatabase("Qt");
 }
@@ -40,22 +32,23 @@ void LoginWindow::on_signin_clicked()
       switch (permissions)
       {
       case 0:
-         hide();
-         main_window_manager = new MainWindowManager(this);
-         main_window_manager->show();
+         main_window = new MainWindowManager(this);
          break;
 
       case 1:
-         hide();
-         main_window_warehouse = new MainWindowWarehouse(this);
-         main_window_warehouse->show();
+         main_window = new MainWindowWarehouse(this);
          break;
 
       case 2:
-         hide();
-         main_window_client = new MainWindowClient(this);
-         main_window_client->show();
+         main_window = new MainWindowClient(this);
          break;
+      }
+      if (main_window)
+      {
+         main_window->setAttribute(Qt::WA_DeleteOnClose);
+         connect(main_window, &QMainWindow::destroyed, this, &QWidget::close);
+         hide();
+         main_window->show();
       }
    }
    else

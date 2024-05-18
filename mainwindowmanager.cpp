@@ -2,13 +2,14 @@
 #include "ui_mainwindowmanager.h"
 
 MainWindowManager::MainWindowManager(QWidget *parent)
-    : QMainWindow(parent)
-    , ui(new Ui::MainWindowManager)
+   : QMainWindow(parent)
+   , ui(new Ui::MainWindowManager)
 {
-    ui->setupUi(this);
+   ui->setupUi(this);
+   this->setAttribute(Qt::WA_DeleteOnClose);
 }
 
 MainWindowManager::~MainWindowManager()
 {
-    delete ui;
+   delete ui;
 }
