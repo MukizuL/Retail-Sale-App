@@ -2,6 +2,9 @@
 #define MAINWINDOWWAREHOUSE_H
 
 #include <QMainWindow>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QSqlQuery>
 
 namespace Ui {
 class MainWindowWarehouse;
@@ -9,14 +12,15 @@ class MainWindowWarehouse;
 
 class MainWindowWarehouse : public QMainWindow
 {
-    Q_OBJECT
+   Q_OBJECT
 
 public:
-    explicit MainWindowWarehouse(QWidget *parent = nullptr);
-    ~MainWindowWarehouse();
+   explicit MainWindowWarehouse(QSqlDatabase database, QWidget *parent = nullptr);
+   ~MainWindowWarehouse();
 
 private:
-    Ui::MainWindowWarehouse *ui;
+   Ui::MainWindowWarehouse *ui;
+   QSqlDatabase db;
 };
 
 #endif // MAINWINDOWWAREHOUSE_H

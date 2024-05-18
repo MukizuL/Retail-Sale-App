@@ -5,11 +5,12 @@ MainWindowManager::MainWindowManager(QSqlDatabase database, QWidget *parent)
    : QMainWindow(parent)
    , ui(new Ui::MainWindowManager)
 {
+   db = database;
    ui->setupUi(this);
-   this->setAttribute(Qt::WA_DeleteOnClose);
 }
 
 MainWindowManager::~MainWindowManager()
 {
    delete ui;
+   db.removeDatabase("Qt");
 }

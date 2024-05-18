@@ -43,7 +43,7 @@ void LoginWindow::on_signin_clicked()
             break;
 
          case 1:
-            //main_window = new MainWindowWarehouse(db);
+            main_window = new MainWindowWarehouse(db);
             break;
 
          case 2:
