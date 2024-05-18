@@ -26,7 +26,7 @@ void LoginWindow::on_signin_clicked()
    int       permissions = 0;
    QSqlQuery account;
 
-   account.prepare("SELECT password, perms FROM Users WHERE login = :login");
+   account.prepare("SELECT password, perms, Name FROM Users WHERE login = :login");
 
    account.bindValue(":login", login);
    account.exec();
@@ -35,7 +35,7 @@ void LoginWindow::on_signin_clicked()
       if (password == account.value(0).toString())
       {
          permissions = account.value(1).toInt();
-         QMessageBox::information(this, "Успех", "Добрый день, " + login);
+         QMessageBox::information(this, "Успех", "Добрый день, " + account.value(2).toString());
          switch (permissions)
          {
          case 0:
@@ -57,10 +57,14 @@ void LoginWindow::on_signin_clicked()
             close();
          }
       }
+      else
+      {
+         QMessageBox::warning(this, "Ошибка", "Введён неправильный логин/пароль!");
+      }
    }
    else
    {
-      QMessageBox::warning(this, "Ошибка", "Введён неправильный логин/пароль!");
+      QMessageBox::warning(this, "Ошибка", "База данных не доступна!");
    }
 }
 
