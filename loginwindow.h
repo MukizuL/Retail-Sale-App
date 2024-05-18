@@ -7,9 +7,6 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
-#include "mainwindowclient.h"
-#include "mainwindowmanager.h"
-#include "mainwindowwarehouse.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -28,8 +25,6 @@ public:
 
 private slots:
    void on_signin_clicked();
-
-   void on_invokesql_clicked();
 
    void on_db_reconnect_clicked();
 

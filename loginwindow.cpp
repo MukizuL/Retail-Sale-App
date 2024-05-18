@@ -1,5 +1,8 @@
 #include "loginwindow.h"
 #include "./ui_loginwindow.h"
+#include "mainwindowclient.h"
+#include "mainwindowmanager.h"
+#include "mainwindowwarehouse.h"
 
 LoginWindow::LoginWindow(QWidget *parent)
    : QDialog(parent)
@@ -65,27 +68,6 @@ void LoginWindow::on_signin_clicked()
    else
    {
       QMessageBox::warning(this, "Ошибка", "База данных не доступна!");
-   }
-}
-
-void LoginWindow::on_invokesql_clicked()
-{
-   QSqlQuery query;
-
-   query.exec("SELECT TABLE_NAME FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE='BASE TABLE'");
-
-   if (query.isActive())
-   {
-      qDebug() << "Tables in the database:";
-      while (query.next())
-      {
-         QString tableName = query.value(0).toString();
-         qDebug() << tableName;
-      }
-   }
-   else
-   {
-      qDebug() << "Failed to retrieve tables:" << query.lastError().text();
    }
 }
 
