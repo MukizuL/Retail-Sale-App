@@ -13,7 +13,136 @@
   <property name="windowTitle">
    <string>MainWindow</string>
   </property>
-  <widget class="QWidget" name="centralwidget"/>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>10</y>
+      <width>261</width>
+      <height>16</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Склад</string>
+    </property>
+   </widget>
+   <widget class="QTabWidget" name="tabWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>30</y>
+      <width>781</width>
+      <height>511</height>
+     </rect>
+    </property>
+    <property name="currentIndex">
+     <number>0</number>
+    </property>
+    <widget class="QWidget" name="warehouse_orders">
+     <attribute name="title">
+      <string>Заказы</string>
+     </attribute>
+     <widget class="QLineEdit" name="searchLine_warehouse_orders">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>531</width>
+        <height>24</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QTableView" name="tableView_warehouse_orders">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>531</width>
+        <height>421</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="searchButton_warehouse_orders">
+      <property name="geometry">
+       <rect>
+        <x>550</x>
+        <y>10</y>
+        <width>101</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Поиск</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="showButton_warehouse_orders">
+      <property name="geometry">
+       <rect>
+        <x>550</x>
+        <y>40</y>
+        <width>101</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Просмотреть</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="warehouse_goods">
+     <attribute name="title">
+      <string>Товары</string>
+     </attribute>
+     <widget class="QTableView" name="tableView_warehouse_goods">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>531</width>
+        <height>421</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="searchLine_warehouse_goods">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>10</y>
+        <width>531</width>
+        <height>24</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="searchButton_warehouse_goods">
+      <property name="geometry">
+       <rect>
+        <x>550</x>
+        <y>10</y>
+        <width>101</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Поиск</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="inventButton_warehouse_goods">
+      <property name="geometry">
+       <rect>
+        <x>550</x>
+        <y>40</y>
+        <width>101</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Инвентаризация</string>
+      </property>
+     </widget>
+    </widget>
+   </widget>
+  </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
     <rect>
@@ -23,6 +152,18 @@
      <height>21</height>
     </rect>
    </property>
+   <widget class="QMenu" name="menu">
+    <property name="title">
+     <string>Файл</string>
+    </property>
+   </widget>
+   <widget class="QMenu" name="menu_2">
+    <property name="title">
+     <string>О программе</string>
+    </property>
+   </widget>
+   <addaction name="menu"/>
+   <addaction name="menu_2"/>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
