@@ -19,7 +19,9 @@ LoginWindow::~LoginWindow()
    {
       delete main_window;
    }
-   db.removeDatabase("Qt");
+   //db.removeDatabase("Qt");
+
+   db.setDatabaseName("./DB.db");
 }
 
 void LoginWindow::on_signin_clicked()
@@ -79,12 +81,14 @@ void LoginWindow::on_db_reconnect_clicked()
 
 void LoginWindow::db_connect()
 {
-   db = QSqlDatabase::addDatabase("QODBC");
-   db.setHostName("127.0.0.1");
-   db.setPort(1433);
-   db.setUserName("admin");
-   db.setPassword("admin");
-   db.setDatabaseName("Qt");
+   db = QSqlDatabase::addDatabase("QSQLITE");
+   //db = QSqlDatabase::addDatabase("QODBC");
+   //db.setHostName("127.0.0.1");
+   //db.setPort(1433);
+   // db.setUserName("admin");
+   //db.setPassword("admin");
+   //db.setDatabaseName("Qt");
+   db.setDatabaseName("./DB.db");
 
    if (db.open())
    {
