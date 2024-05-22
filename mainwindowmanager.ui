@@ -37,9 +37,9 @@
      </rect>
     </property>
     <property name="currentIndex">
-     <number>0</number>
+     <number>2</number>
     </property>
-    <widget class="QWidget" name="tab">
+    <widget class="QWidget" name="manager_orders">
      <attribute name="title">
       <string>Заказы</string>
      </attribute>
@@ -90,7 +90,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_2">
+    <widget class="QWidget" name="manager_goods">
      <attribute name="title">
       <string>Товары</string>
      </attribute>
@@ -167,7 +167,7 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="tab_3">
+    <widget class="QWidget" name="manager_clients">
      <attribute name="title">
       <string>Клиенты</string>
      </attribute>
