@@ -21,7 +21,7 @@ LoginWindow::~LoginWindow()
    }
    //db.removeDatabase("Qt");
 
-   db.setDatabaseName("./DB.db");
+   db.removeDatabase("./DB.db");
 }
 
 void LoginWindow::on_signin_clicked()
