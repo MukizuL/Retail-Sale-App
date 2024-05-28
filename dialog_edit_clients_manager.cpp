@@ -1,14 +1,14 @@
 #include "dialog_edit_clients_manager.h"
 #include "ui_dialog_edit_clients_manager.h"
 
-dialog_edit_clients_manager::dialog_edit_clients_manager(QWidget *parent) :
+DialogEditClientsManager::DialogEditClientsManager(QWidget *parent) :
    QDialog(parent),
    ui(new Ui::DialogEditClientsManager)
 {
    ui->setupUi(this);
 }
 
-dialog_edit_clients_manager::~dialog_edit_clients_manager()
+DialogEditClientsManager::~DialogEditClientsManager()
 {
    delete ui;
 }

@@ -11,13 +11,13 @@ namespace Ui {
 class DialogEditGoodsManager;
 }
 
-class dialog_edit_goods_manager : public QDialog
+class DialogEditGoodsManager : public QDialog
 {
    Q_OBJECT
 
 public:
-   explicit dialog_edit_goods_manager(QSqlDatabase database, QVector <QVariant> data, QWidget *parent = nullptr);
-   ~dialog_edit_goods_manager();
+   explicit DialogEditGoodsManager(QSqlDatabase database, QVector <QVariant> data, QWidget *parent = nullptr);
+   ~DialogEditGoodsManager();
 
 private slots:
    void on_pushButton_delete_clicked();

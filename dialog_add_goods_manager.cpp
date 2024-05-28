@@ -1,7 +1,7 @@
 #include "dialog_add_goods_manager.h"
 #include "ui_dialog_add_goods_manager.h"
 
-dialog_add_goods_manager::dialog_add_goods_manager(QSqlDatabase database, QWidget *parent) :
+DialogAddGoodsManager::DialogAddGoodsManager(QSqlDatabase database, QWidget *parent) :
    QDialog(parent),
    ui(new Ui::DialogAddGoodsManager)
 {
@@ -9,12 +9,12 @@ dialog_add_goods_manager::dialog_add_goods_manager(QSqlDatabase database, QWidge
    ui->setupUi(this);
 }
 
-dialog_add_goods_manager::~dialog_add_goods_manager()
+DialogAddGoodsManager::~DialogAddGoodsManager()
 {
    delete ui;
 }
 
-void dialog_add_goods_manager::on_buttonBox_accepted()
+void DialogAddGoodsManager::on_buttonBox_accepted()
 {
    QSqlQuery query;
    QString   name   = ui->lineEdit_name->text().isEmpty() ? QString() : ui->lineEdit_name->text();

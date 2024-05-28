@@ -1,7 +1,7 @@
 #include "dialog_edit_goods_manager.h"
 #include "ui_dialog_edit_goods_manager.h"
 
-dialog_edit_goods_manager::dialog_edit_goods_manager(QSqlDatabase database, QVector <QVariant> data, QWidget *parent) :
+DialogEditGoodsManager::DialogEditGoodsManager(QSqlDatabase database, QVector <QVariant> data, QWidget *parent) :
    QDialog(parent),
    ui(new Ui::DialogEditGoodsManager)
 {
@@ -14,7 +14,7 @@ dialog_edit_goods_manager::dialog_edit_goods_manager(QSqlDatabase database, QVec
    ui->plainTextEdit_info->setPlainText(item_data[4].toString());
 }
 
-dialog_edit_goods_manager::~dialog_edit_goods_manager()
+DialogEditGoodsManager::~DialogEditGoodsManager()
 {
    delete ui;
 }
@@ -25,7 +25,7 @@ dialog_edit_goods_manager::~dialog_edit_goods_manager()
  * to delete the item from the "Goods" table in the database, using the item's ID.
  * After executing the query, it closes the dialog.
  */
-void dialog_edit_goods_manager::on_pushButton_delete_clicked()
+void DialogEditGoodsManager::on_pushButton_delete_clicked()
 {
    QMessageBox::StandardButton reply = QMessageBox::question(this, "Retail Sale App", "Вы уверены, что хотите удалить данный товар?",
                                                              QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
@@ -48,7 +48,7 @@ void dialog_edit_goods_manager::on_pushButton_delete_clicked()
  * If the query execution fails, it displays an error message to the user using a message box.
  * If the query succeeds, it closes the dialog.
  */
-void dialog_edit_goods_manager::on_pushButton_ok_clicked()
+void DialogEditGoodsManager::on_pushButton_ok_clicked()
 {
    QSqlQuery query;
    QString   name   = ui->lineEdit_name->text().isEmpty() ? QString() : ui->lineEdit_name->text();

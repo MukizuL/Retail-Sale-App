@@ -7,13 +7,13 @@ namespace Ui {
    class DialogEditClientsManager;
 }
 
-class dialog_edit_clients_manager : public QDialog
+class DialogEditClientsManager : public QDialog
 {
    Q_OBJECT
 
 public:
-   explicit dialog_edit_clients_manager(QWidget *parent = nullptr);
-   ~dialog_edit_clients_manager();
+   explicit DialogEditClientsManager(QWidget *parent = nullptr);
+   ~DialogEditClientsManager();
 
 private:
    Ui::DialogEditClientsManager *ui;

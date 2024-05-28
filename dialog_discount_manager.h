@@ -7,13 +7,13 @@ namespace Ui {
    class DialogDiscountManager;
 }
 
-class dialog_discount_manager : public QDialog
+class DialogDiscountManager : public QDialog
 {
    Q_OBJECT
 
 public:
-   explicit dialog_discount_manager(QWidget *parent = nullptr);
-   ~dialog_discount_manager();
+   explicit DialogDiscountManager(QWidget *parent = nullptr);
+   ~DialogDiscountManager();
 
 private:
    Ui::DialogDiscountManager *ui;

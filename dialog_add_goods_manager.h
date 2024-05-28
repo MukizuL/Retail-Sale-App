@@ -11,13 +11,13 @@ namespace Ui {
 class DialogAddGoodsManager;
 }
 
-class dialog_add_goods_manager : public QDialog
+class DialogAddGoodsManager : public QDialog
 {
    Q_OBJECT
 
 public:
-   explicit dialog_add_goods_manager(QSqlDatabase database, QWidget *parent = nullptr);
-   ~dialog_add_goods_manager();
+   explicit DialogAddGoodsManager(QSqlDatabase database, QWidget *parent = nullptr);
+   ~DialogAddGoodsManager();
 
 private slots:
    void on_buttonBox_accepted();

@@ -13,7 +13,7 @@ MainWindowManager::MainWindowManager(QSqlDatabase database, QWidget *parent)
    orders_model = new QSqlTableModel(this, db);
    users_model->setTable("Users");
    goods_model->setTable("Goods");
-   //orders_model ->setTable("Orders");
+   orders_model->setTable("Orders");
    users_model->select();
    goods_model->select();
    orders_model->select();
@@ -37,7 +37,7 @@ MainWindowManager::~MainWindowManager()
 
 void MainWindowManager::on_addButton_manager_goods_clicked()
 {
-   QDialog *dialog = new dialog_add_goods_manager(db, this);
+   QDialog *dialog = new DialogAddGoodsManager(db, this);
 
    dialog->exec();
    goods_model->select();
@@ -54,7 +54,7 @@ void MainWindowManager::on_editButton_manager_goods_clicked()
       variant = goods_model->data(goods_model->index(row, i));
       data[i] = variant;
    }
-   QDialog *dialog = new dialog_edit_goods_manager(db, data, this);
+   QDialog *dialog = new DialogEditGoodsManager(db, data, this);
 
    dialog->exec();
    goods_model->select();
