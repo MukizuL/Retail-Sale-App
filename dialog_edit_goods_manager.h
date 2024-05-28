@@ -19,6 +19,11 @@ public:
    explicit dialog_edit_goods_manager(QSqlDatabase database, QVector <QVariant> data, QWidget *parent = nullptr);
    ~dialog_edit_goods_manager();
 
+private slots:
+   void on_pushButton_delete_clicked();
+
+   void on_pushButton_ok_clicked();
+
 private:
    Ui::dialog_edit_goods_manager *ui;
    QSqlDatabase db;

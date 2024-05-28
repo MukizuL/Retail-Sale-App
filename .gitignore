@@ -35,6 +35,8 @@ Thumbs.db
 /.qmake.cache
 /.qmake.stash
 /build
+/docs
+doxygen.cfg
 
 # qtcreator generated files
 *.pro.user*
