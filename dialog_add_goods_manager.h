@@ -8,7 +8,7 @@
 #include <QMessageBox>
 
 namespace Ui {
-class dialog_add_goods_manager;
+class DialogAddGoodsManager;
 }
 
 class dialog_add_goods_manager : public QDialog
@@ -23,7 +23,7 @@ private slots:
    void on_buttonBox_accepted();
 
 private:
-   Ui::dialog_add_goods_manager *ui;
+   Ui::DialogAddGoodsManager *ui;
    QSqlDatabase db;
 };
 

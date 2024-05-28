@@ -3,7 +3,7 @@
 
 dialog_discount_manager::dialog_discount_manager(QWidget *parent) :
    QDialog(parent),
-   ui(new Ui::dialog_discount_manager)
+   ui(new Ui::DialogDiscountManager)
 {
    ui->setupUi(this);
 }

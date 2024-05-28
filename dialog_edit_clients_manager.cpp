@@ -3,7 +3,7 @@
 
 dialog_edit_clients_manager::dialog_edit_clients_manager(QWidget *parent) :
    QDialog(parent),
-   ui(new Ui::dialog_edit_clients_manager)
+   ui(new Ui::DialogEditClientsManager)
 {
    ui->setupUi(this);
 }

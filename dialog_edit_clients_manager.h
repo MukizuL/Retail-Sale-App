@@ -4,7 +4,7 @@
 #include <QDialog>
 
 namespace Ui {
-   class dialog_edit_clients_manager;
+   class DialogEditClientsManager;
 }
 
 class dialog_edit_clients_manager : public QDialog
@@ -16,7 +16,7 @@ public:
    ~dialog_edit_clients_manager();
 
 private:
-   Ui::dialog_edit_clients_manager *ui;
+   Ui::DialogEditClientsManager *ui;
 };
 
 #endif // DIALOG_EDIT_CLIENTS_MANAGER_H

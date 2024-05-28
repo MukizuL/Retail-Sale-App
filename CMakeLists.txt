@@ -31,6 +31,7 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
         dialog_add_goods_manager.h dialog_add_goods_manager.cpp dialog_add_goods_manager.ui
         dialog_discount_manager.h dialog_discount_manager.cpp dialog_discount_manager.ui
         dialog_edit_clients_manager.h dialog_edit_clients_manager.cpp dialog_edit_clients_manager.ui
+        dialog_create_order.h dialog_create_order.cpp dialog_create_order.ui
     )
 # Define target properties for Android with Qt 6 as:
 #    set_property(TARGET RetailSaleApp APPEND PROPERTY QT_ANDROID_PACKAGE_SOURCE_DIR

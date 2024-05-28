@@ -3,7 +3,7 @@
 
 dialog_edit_goods_manager::dialog_edit_goods_manager(QSqlDatabase database, QVector <QVariant> data, QWidget *parent) :
    QDialog(parent),
-   ui(new Ui::dialog_edit_goods_manager)
+   ui(new Ui::DialogEditGoodsManager)
 {
    db        = database;
    item_data = data;

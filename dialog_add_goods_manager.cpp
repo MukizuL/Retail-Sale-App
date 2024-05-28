@@ -3,7 +3,7 @@
 
 dialog_add_goods_manager::dialog_add_goods_manager(QSqlDatabase database, QWidget *parent) :
    QDialog(parent),
-   ui(new Ui::dialog_add_goods_manager)
+   ui(new Ui::DialogAddGoodsManager)
 {
    db = database;
    ui->setupUi(this);

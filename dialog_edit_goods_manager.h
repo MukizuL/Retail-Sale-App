@@ -8,7 +8,7 @@
 #include <QMessageBox>
 
 namespace Ui {
-class dialog_edit_goods_manager;
+class DialogEditGoodsManager;
 }
 
 class dialog_edit_goods_manager : public QDialog
@@ -25,7 +25,7 @@ private slots:
    void on_pushButton_ok_clicked();
 
 private:
-   Ui::dialog_edit_goods_manager *ui;
+   Ui::DialogEditGoodsManager *ui;
    QSqlDatabase db;
    QVector <QVariant> item_data;
 };

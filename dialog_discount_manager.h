@@ -4,7 +4,7 @@
 #include <QDialog>
 
 namespace Ui {
-   class dialog_discount_manager;
+   class DialogDiscountManager;
 }
 
 class dialog_discount_manager : public QDialog
@@ -16,7 +16,7 @@ public:
    ~dialog_discount_manager();
 
 private:
-   Ui::dialog_discount_manager *ui;
+   Ui::DialogDiscountManager *ui;
 };
 
 #endif // DIALOG_DISCOUNT_MANAGER_H
