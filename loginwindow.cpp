@@ -31,7 +31,7 @@ void LoginWindow::on_signin_clicked()
    int       permissions = 0;
    QSqlQuery account;
 
-   account.prepare("SELECT password, perms, Name FROM Users WHERE login = :login");
+   account.prepare("SELECT password, perms, Name, id FROM Users WHERE login = :login");
 
    account.bindValue(":login", login);
    account.exec();
@@ -52,7 +52,7 @@ void LoginWindow::on_signin_clicked()
             break;
 
          case 2:
-            main_window = new MainWindowClient(db);
+            main_window = new MainWindowClient(db, account.value(3).toInt());
             break;
          }
          if (main_window)
