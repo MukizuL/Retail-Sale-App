@@ -2,12 +2,13 @@
 #include "ui_mainwindowmanager.h"
 #include "dialog_add_goods_manager.h"
 #include "dialog_edit_goods_manager.h"
+#include "dialog_discount_manager.h"
 
-MainWindowManager::MainWindowManager(QSqlDatabase database, QWidget *parent)
+MainWindowManager::MainWindowManager(QWidget *parent)
    : QMainWindow(parent)
    , ui(new Ui::MainWindowManager)
 {
-   db           = database;
+   db           = QSqlDatabase::database();
    users_model  = new QSqlTableModel(this, db);
    goods_model  = new QSqlTableModel(this, db);
    orders_model = new QSqlTableModel(this, db);
@@ -32,7 +33,6 @@ MainWindowManager::~MainWindowManager()
    delete users_model;
    delete goods_model;
    delete orders_model;
-   db.removeDatabase("Qt");
 }
 
 void MainWindowManager::on_addButton_manager_goods_clicked()
@@ -64,4 +64,12 @@ void MainWindowManager::on_editButton_manager_goods_clicked()
 void MainWindowManager::on_tableView_manager_goods_clicked(const QModelIndex&index)
 {
    row = index.row();
+}
+
+void MainWindowManager::on_discountButton_manager_goods_clicked()
+{
+   QDialog *dialog = new DialogDiscountManager(db, this);
+
+   dialog->exec();
+   delete dialog;
 }

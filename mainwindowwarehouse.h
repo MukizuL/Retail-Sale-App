@@ -15,7 +15,7 @@ class MainWindowWarehouse : public QMainWindow
    Q_OBJECT
 
 public:
-   explicit MainWindowWarehouse(QSqlDatabase database, QWidget *parent = nullptr);
+   explicit MainWindowWarehouse(QWidget *parent = nullptr);
    ~MainWindowWarehouse();
 
 private:

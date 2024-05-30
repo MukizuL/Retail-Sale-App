@@ -16,7 +16,7 @@ class MainWindowManager : public QMainWindow
    Q_OBJECT
 
 public:
-   explicit MainWindowManager(QSqlDatabase database, QWidget *parent = nullptr);
+   explicit MainWindowManager(QWidget *parent = nullptr);
    ~MainWindowManager();
 
 private slots:
@@ -25,6 +25,8 @@ private slots:
    void on_editButton_manager_goods_clicked();
 
    void on_tableView_manager_goods_clicked(const QModelIndex&index);
+
+   void on_discountButton_manager_goods_clicked();
 
 private:
    Ui::MainWindowManager *ui;
