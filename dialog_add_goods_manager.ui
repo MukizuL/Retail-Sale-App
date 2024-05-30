@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>dialog_add_goods_manager</class>
- <widget class="QDialog" name="dialog_add_goods_manager">
+ <class>DialogAddGoodsManager</class>
+ <widget class="QDialog" name="DialogAddGoodsManager">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -144,7 +144,7 @@
   <connection>
    <sender>buttonBox</sender>
    <signal>rejected()</signal>
-   <receiver>dialog_add_goods_manager</receiver>
+   <receiver>DialogAddGoodsManager</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

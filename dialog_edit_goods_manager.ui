@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>dialog_edit_goods_manager</class>
- <widget class="QDialog" name="dialog_edit_goods_manager">
+ <class>DialogEditGoodsManager</class>
+ <widget class="QDialog" name="DialogEditGoodsManager">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -235,7 +235,7 @@
   <connection>
    <sender>pushButton_cancel</sender>
    <signal>clicked()</signal>
-   <receiver>dialog_edit_goods_manager</receiver>
+   <receiver>DialogEditGoodsManager</receiver>
    <slot>reject()</slot>
    <hints>
     <hint type="sourcelabel">

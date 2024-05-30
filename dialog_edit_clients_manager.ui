@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>dialog_edit_clients_manager</class>
- <widget class="QDialog" name="dialog_edit_clients_manager">
+ <class>DialogEditClientsManager</class>
+ <widget class="QDialog" name="DialogEditClientsManager">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -19,7 +19,7 @@
      <x>10</x>
      <y>30</y>
      <width>451</width>
-     <height>131</height>
+     <height>300</height>
     </rect>
    </property>
    <layout class="QFormLayout" name="formLayout">
