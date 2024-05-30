@@ -8,8 +8,12 @@ DialogCreateOrder::DialogCreateOrder(QSqlDatabase database, int client, QWidget 
    ui->setupUi(this);
    db        = database;
    id_client = client;
-   cart      = QSqlDatabase::addDatabase("QSQLITE", "shopcart");
-   cart.setDatabaseName("./cart.db");
+   cart      = QSqlDatabase::database("shopcart");
+   if (!cart.isValid())
+   {
+      cart = QSqlDatabase::addDatabase("QSQLITE", "shopcart");
+      cart.setDatabaseName("./cart.db");
+   }
    cart.open();
    goods_model = new QSqlTableModel(this, db);
    cart_model  = new QSqlTableModel(this, cart);
@@ -35,6 +39,7 @@ DialogCreateOrder::~DialogCreateOrder()
    delete ui;
    delete goods_model;
    delete cart_model;
+   cart.close();
 }
 
 void DialogCreateOrder::on_pushButton_add_clicked()
@@ -115,27 +120,26 @@ void DialogCreateOrder::calculate_total()
    cart_model->select();
    double    total    = 0;
    double    discount = 0;
-   int       items    = 0;
-   double    quantity = 0;
+   int       items    = 0; //Unique items count
    QSqlQuery discount_db(db);
    QSqlQuery query(cart);
    query.prepare("SELECT Price, Amount FROM Goods");
    query.exec();
    while (query.next())
    {
-      total    += query.value(0).toDouble() * query.value(1).toDouble();
-      quantity += query.value(1).toDouble();
+      total += query.value(0).toDouble() * query.value(1).toDouble();    //Price * Amount
       items++;
    }
    discount_db.prepare("SELECT value, pretext FROM Discounts");
    discount_db.exec();
    discount_db.next();
-   if (discount_db.value(0).toDouble() <= items)
+   if (discount_db.value(1).toDouble() <= items)
    {
       discount += discount_db.value(0).toDouble();
    }
+
    discount_db.next();
-   if (discount_db.value(1).toDouble() <= quantity)
+   if (discount_db.value(1).toDouble() <= total)
    {
       discount += discount_db.value(0).toDouble();
    }
@@ -230,7 +234,6 @@ void DialogCreateOrder::on_pushButton_create_clicked()
 
    //QVector <QPair <int, double> > to_update;
    QVector <QVariantList> to_update(2);
-   int times = 0;
    //while (select_query_goods_db.next())
    //{
    //   double new_val = select_query_goods_db.value(1).toDouble() - data[3].at(data[1].indexOf(select_query_goods_db.value(0))).toDouble();
@@ -241,10 +244,8 @@ void DialogCreateOrder::on_pushButton_create_clicked()
       double new_val = select_query_goods_db.value(1).toDouble() - data[3].at(data[1].indexOf(select_query_goods_db.value(0))).toDouble();
       to_update[0].append(select_query_goods_db.value(0));
       to_update[1].append(QVariant::fromValue(new_val));
-      times++;
    }
 
-   qDebug() << times;
 
    update_query_goods_db.prepare("UPDATE Goods SET amount = ? WHERE id = ?");
 

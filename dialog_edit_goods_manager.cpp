@@ -62,6 +62,7 @@ void DialogEditGoodsManager::on_pushButton_ok_clicked()
    query.bindValue(":Bulk_cost", bulk);
    query.bindValue(":Info", info);
    query.bindValue(":id", item_data[0]);
+
    if (!query.exec())
    {
       QSqlError err = query.lastError();
