@@ -19,9 +19,7 @@ LoginWindow::~LoginWindow()
    {
       delete main_window;
    }
-   //db.removeDatabase("Qt");
-
-   db.removeDatabase("./DB.db");
+   db.close();
 }
 
 void LoginWindow::on_signin_clicked()
@@ -29,7 +27,7 @@ void LoginWindow::on_signin_clicked()
    QString   login       = ui->login->text();
    QString   password    = ui->password->text();
    int       permissions = 0;
-   QSqlQuery account;
+   QSqlQuery account(db);
 
    account.prepare("SELECT password, perms, Name, id FROM Users WHERE login = :login");
 
@@ -44,22 +42,21 @@ void LoginWindow::on_signin_clicked()
          switch (permissions)
          {
          case 0:
-            main_window = new MainWindowManager(db);
+            main_window = new MainWindowManager();
             break;
 
          case 1:
-            main_window = new MainWindowWarehouse(db);
+            main_window = new MainWindowWarehouse();
             break;
 
          case 2:
-            main_window = new MainWindowClient(db, account.value(3).toInt());
+            main_window = new MainWindowClient(account.value(3).toInt());
             break;
          }
          if (main_window)
          {
-            //hide();
             main_window->show();
-            close();
+            accept();
          }
       }
       else
@@ -82,12 +79,6 @@ void LoginWindow::on_db_reconnect_clicked()
 void LoginWindow::db_connect()
 {
    db = QSqlDatabase::addDatabase("QSQLITE");
-   //db = QSqlDatabase::addDatabase("QODBC");
-   //db.setHostName("127.0.0.1");
-   //db.setPort(1433);
-   // db.setUserName("admin");
-   //db.setPassword("admin");
-   //db.setDatabaseName("Qt");
    db.setDatabaseName("./DB.db");
 
    if (db.open())
