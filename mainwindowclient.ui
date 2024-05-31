@@ -71,6 +71,9 @@
         <property name="editTriggers">
          <set>QAbstractItemView::NoEditTriggers</set>
         </property>
+        <property name="selectionMode">
+         <enum>QAbstractItemView::SingleSelection</enum>
+        </property>
         <property name="selectionBehavior">
          <enum>QAbstractItemView::SelectRows</enum>
         </property>
@@ -135,7 +138,7 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="showButton_client">
+         <widget class="QPushButton" name="pushButton_show">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
             <horstretch>0</horstretch>

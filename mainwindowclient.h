@@ -2,6 +2,7 @@
 #define MAINWINDOWCLIENT_H
 
 #include <QMainWindow>
+#include <QMessageBox>
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
@@ -22,6 +23,8 @@ public:
 
 private slots:
    void on_create_orderButton_client_clicked();
+
+   void on_pushButton_show_clicked();
 
 private:
    void update_model();

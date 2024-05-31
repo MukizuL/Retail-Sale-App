@@ -1,6 +1,7 @@
 #include "mainwindowclient.h"
 #include "ui_mainwindowclient.h"
 #include "dialog_create_order.h"
+#include "dialog_view_orders.h"
 
 MainWindowClient::MainWindowClient(int user, QWidget *parent)
    : QMainWindow(parent)
@@ -44,6 +45,35 @@ void MainWindowClient::update_model()
                   "CAST(Orders.discount AS TEXT) || ' %' AS 'Скидка',"
                   "CAST(Orders.total AS TEXT) || ' руб.' AS 'Итог'"
                   "FROM Orders");
-   orders.exec();
+   if (!orders.exec())
+   {
+      QSqlError err = orders.lastError();
+      QMessageBox::critical(this, "Error", err.databaseText() + "\n" + err.driverText());
+      return;
+   }
    orders_model->setQuery(std::move(orders));
+}
+
+void MainWindowClient::on_pushButton_show_clicked()
+{
+   QList <QModelIndex> index = ui->tableView_client->selectionModel()->selectedRows(); //index should contain only 1 item and it will
+
+   if (index.empty() || !index[0].isValid())
+   {
+      QMessageBox::warning(this, "Внимание", "Вы не выбрали заказ.");
+      return;
+   }
+   QVariant           temp;
+   QVector <QVariant> data;                                                            //id_order, date, discount, total
+
+   for (int i = 0; i < 4; i++)
+   {
+      temp = orders_model->data(orders_model->index(index[0].row(), i));
+      data.append(temp);
+   }
+   QDialog *dialog = new DialogViewOrders(data, this);
+
+   dialog->exec();
+   update_model();
+   delete dialog;
 }
