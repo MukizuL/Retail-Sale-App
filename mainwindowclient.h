@@ -26,6 +26,8 @@ private slots:
 
    void on_pushButton_show_clicked();
 
+   void on_delete_orderButton_client_clicked();
+
 private:
    void update_model();
 
