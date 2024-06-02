@@ -164,10 +164,10 @@ void DialogCreateOrder::on_pushButton_create_clicked()
    db.transaction();
 
    //Create new Order
-   insert_query_orders_db.prepare("INSERT INTO Orders (status, id_client, discount, total) values (0, :id_client, :discount, :total)");
+   insert_query_orders_db.prepare("INSERT INTO Orders (status, id_client, discount) values (0, :id_client, :discount)");
    insert_query_orders_db.bindValue(":id_client", id_client);
    insert_query_orders_db.bindValue(":discount", ui->lineEdit_discount->text().toDouble());
-   insert_query_orders_db.bindValue(":total", ui->lineEdit_total->text().toDouble());
+   //insert_query_orders_db.bindValue(":total", ui->lineEdit_total->text().toDouble());
    if (!insert_query_orders_db.exec())
    {
       QSqlError err = insert_query_orders_db.lastError();

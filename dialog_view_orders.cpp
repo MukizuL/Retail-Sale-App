@@ -22,19 +22,40 @@ DialogViewOrders::~DialogViewOrders()
 void DialogViewOrders::update_model()
 {
    QSqlQuery query(db);
+   QSqlQuery order(db);
 
-   query.prepare("SELECT Goods.Name AS 'Название', Items.Price AS 'Цена', Items.Amount AS 'Количество', Items.Price * Items.Amount AS 'Итог' "
+   query.prepare("SELECT Goods.Name AS 'Название', Items.Price * (1 - Orders.discount / 100) AS 'Цена', Items.Amount AS 'Количество', Items.Price * Items.Amount * (1 - Orders.discount / 100) AS 'Итог' "
                  "FROM Orders "
                  "JOIN Items ON Items.id_order = Orders.id "
                  "JOIN Goods ON Goods.id = Items.id_good "
                  "WHERE Orders.id = :id");
    query.bindValue(":id", items[0].toInt());
+
+   order.prepare("SELECT Orders.id, Orders.Date, Orders.Discount, SUM(Items.amount * Items.price) * (1 - Orders.discount / 100) "
+                 "FROM Orders "
+                 "JOIN Items ON Items.id_order = Orders.id "
+                 "WHERE Orders.id = :id");
+   order.bindValue(":id", items[0].toInt());
+
    if (!query.exec())
    {
       QSqlError err = query.lastError();
       QMessageBox::critical(this, "Ошибка", err.databaseText() + "\n" + err.driverText());
       return;
    }
+
+   if (!order.exec())
+   {
+      QSqlError err = order.lastError();
+      QMessageBox::critical(this, "Ошибка", err.databaseText() + "\n" + err.driverText());
+      return;
+   }
+
+   order.next();
+   ui->label->setText("Заказ №" + order.value(0).toString() + " Дата: " + order.value(1).toString());
+   ui->lineEdit_discount->setText(order.value(2).toString());
+   ui->lineEdit_total->setText(order.value(3).toString());
+
    items_model->setQuery(std::move(query));
 }
 
@@ -58,16 +79,17 @@ void DialogViewOrders::on_pushButton_export_clicked()
    QSqlQuery   item(db);
    QSqlQuery   order(db);
 
-   item.prepare("SELECT Goods.Name AS 'Название', Items.Price AS 'Цена', Items.Amount AS 'Количество', Items.Price * Items.Amount AS 'Итог' "
+   item.prepare("SELECT Goods.Name AS 'Название', Items.Price * (1 - Orders.discount / 100) AS 'Цена', Items.Amount AS 'Количество', Items.Price * Items.Amount * (1 - Orders.discount / 100) AS 'Итог' "
                 "FROM Orders "
                 "JOIN Items ON Items.id_order = Orders.id "
                 "JOIN Goods ON Goods.id = Items.id_good "
                 "WHERE Orders.id = :id");
    item.bindValue(":id", items[0].toInt());
 
-   order.prepare("SELECT Users.LegalName, Users.Surname, Users.name, Users.Otchestvo, Date, Orders.Discount, Total "
+   order.prepare("SELECT Users.LegalName, Users.Surname, Users.name, Users.Otchestvo, Date, Orders.Discount, SUM(Items.amount * Items.price) * (1 - Orders.discount / 100) "
                  "FROM Orders "
                  "JOIN Users ON Orders.id_client = Users.id "
+                 "JOIN Items ON Items.id_order = Orders.id "
                  "WHERE Orders.id = :id");
    order.bindValue(":id", items[0].toInt());
 
