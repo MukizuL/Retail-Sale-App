@@ -163,13 +163,6 @@
          </widget>
         </item>
         <item>
-         <widget class="QPushButton" name="pushButton_export">
-          <property name="text">
-           <string>Экспорт</string>
-          </property>
-         </widget>
-        </item>
-        <item>
          <spacer name="verticalSpacer">
           <property name="orientation">
            <enum>Qt::Vertical</enum>
