@@ -16,7 +16,7 @@ class DialogEditGoodsManager : public QDialog
    Q_OBJECT
 
 public:
-   explicit DialogEditGoodsManager(QSqlDatabase database, QVector <QVariant> data, QWidget *parent = nullptr);
+   explicit DialogEditGoodsManager(QVector <QVariant> data, QWidget *parent = nullptr);
    ~DialogEditGoodsManager();
 
 private slots:

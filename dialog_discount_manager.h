@@ -16,7 +16,7 @@ class DialogDiscountManager : public QDialog
    Q_OBJECT
 
 public:
-   explicit DialogDiscountManager(QSqlDatabase database, QWidget *parent = nullptr);
+   explicit DialogDiscountManager(QWidget *parent = nullptr);
    ~DialogDiscountManager();
 
 private slots:

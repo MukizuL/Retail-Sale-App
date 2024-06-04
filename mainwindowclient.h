@@ -6,7 +6,6 @@
 #include <QSqlDatabase>
 #include <QSqlError>
 #include <QSqlQuery>
-#include <QSqlTableModel>
 #include <QSqlQueryModel>
 
 namespace Ui {

@@ -1,11 +1,12 @@
 #include "dialog_discount_manager.h"
 #include "ui_dialog_discount_manager.h"
 
-DialogDiscountManager::DialogDiscountManager(QSqlDatabase database, QWidget *parent) :
+DialogDiscountManager::DialogDiscountManager(QWidget *parent) :
    QDialog(parent),
    ui(new Ui::DialogDiscountManager)
 {
    ui->setupUi(this);
+   db = QSqlDatabase::database();
    QSqlQuery query;
    query.exec("SELECT value, pretext FROM Discounts");
    query.next();

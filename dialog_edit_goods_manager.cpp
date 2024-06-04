@@ -1,11 +1,11 @@
 #include "dialog_edit_goods_manager.h"
 #include "ui_dialog_edit_goods_manager.h"
 
-DialogEditGoodsManager::DialogEditGoodsManager(QSqlDatabase database, QVector <QVariant> data, QWidget *parent) :
+DialogEditGoodsManager::DialogEditGoodsManager(QVector <QVariant> data, QWidget *parent) :
    QDialog(parent),
    ui(new Ui::DialogEditGoodsManager)
 {
-   db        = database;
+   db        = QSqlDatabase::database();
    item_data = data;
    ui->setupUi(this);
    ui->lineEdit_name->setText(item_data[1].toString());

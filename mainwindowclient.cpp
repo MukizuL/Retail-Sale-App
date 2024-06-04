@@ -14,8 +14,6 @@ MainWindowClient::MainWindowClient(int user, QWidget *parent)
    orders_model = new QSqlQueryModel;
    update_model();
    ui->tableView_client->setModel(orders_model);
-   QSqlQuery query(db);
-   query.exec("SELECT Users.LegalName FROM USERS WHERE Users.id = " + QString::number(id_client) + "");
 }
 
 MainWindowClient::~MainWindowClient()

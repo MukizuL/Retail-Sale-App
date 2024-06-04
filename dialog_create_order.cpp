@@ -178,7 +178,7 @@ void DialogCreateOrder::on_pushButton_create_clicked()
    db.transaction();
 
    //Create new Order
-   insert_query_orders_db.prepare("INSERT INTO Orders (status, id_client, discount) values (0, :id_client, :discount)");
+   insert_query_orders_db.prepare("INSERT INTO Orders (status, id_client, discount) values (1, :id_client, :discount)");
    insert_query_orders_db.bindValue(":id_client", id_client);
    insert_query_orders_db.bindValue(":discount", ui->lineEdit_discount->text().toDouble());
 
@@ -246,13 +246,8 @@ void DialogCreateOrder::on_pushButton_create_clicked()
       return;
    }
 
-   //QVector <QPair <int, double> > to_update;
    QVector <QVariantList> to_update(2);
-   //while (select_query_goods_db.next())
-   //{
-   //   double new_val = select_query_goods_db.value(1).toDouble() - data[3].at(data[1].indexOf(select_query_goods_db.value(0))).toDouble();
-   //   to_update.append(QPair <int, double>(select_query_goods_db.value(0).toInt(), new_val));
-   //}
+
    while (select_query_goods_db.next())
    {
       double new_val = select_query_goods_db.value(1).toDouble() - data[3].at(data[1].indexOf(select_query_goods_db.value(0))).toDouble();
@@ -273,7 +268,6 @@ void DialogCreateOrder::on_pushButton_create_clicked()
       db.rollback();
       return;
    }
-
 
    //End transaction
    if (!db.commit())
