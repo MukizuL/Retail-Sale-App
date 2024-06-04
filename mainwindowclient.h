@@ -28,6 +28,10 @@ private slots:
 
    void on_delete_orderButton_client_clicked();
 
+   void on_action_profile_triggered();
+
+   void on_action_triggered();
+
 private:
    void update_model();
 

@@ -2,6 +2,7 @@
 #include "ui_mainwindowclient.h"
 #include "dialog_create_order.h"
 #include "dialog_view_orders.h"
+#include "dialog_profile_edit.h"
 
 MainWindowClient::MainWindowClient(int user, QWidget *parent)
    : QMainWindow(parent)
@@ -13,6 +14,8 @@ MainWindowClient::MainWindowClient(int user, QWidget *parent)
    orders_model = new QSqlQueryModel;
    update_model();
    ui->tableView_client->setModel(orders_model);
+   QSqlQuery query(db);
+   query.exec("SELECT Users.LegalName FROM USERS WHERE Users.id = " + QString::number(id_client) + "");
 }
 
 MainWindowClient::~MainWindowClient()
@@ -48,6 +51,7 @@ void MainWindowClient::update_model()
                   "FROM Orders "
                   "JOIN Items ON Items.id_order = Orders.id "
                   "GROUP BY Orders.id");
+
    if (!orders.exec())
    {
       QSqlError err = orders.lastError();
@@ -79,6 +83,24 @@ void MainWindowClient::on_pushButton_show_clicked()
 
    dialog->exec();
    update_model();
+   delete dialog;
+}
+
+//Profile edit
+void MainWindowClient::on_action_profile_triggered()
+{
+   QDialog *dialog = new DialogProfileEdit(false, id_client, this);
+
+   dialog->exec();
+   delete dialog;
+}
+
+//Password edit
+void MainWindowClient::on_action_triggered()
+{
+   QDialog *dialog = new DialogProfileEdit(true, id_client, this);
+
+   dialog->exec();
    delete dialog;
 }
 
