@@ -57,20 +57,31 @@ void DialogCreateOrder::on_pushButton_add_clicked()
          variant = goods_model->data(goods_model->index(index.row(), i));
          data[i] = variant;
       }
+
+      if (amount <= 0)
+      {
+         QMessageBox::warning(this, "Внимание", "Выберите больше товара.");
+         return;
+      }
+
       if (amount > data[5].toDouble())
       {
          QMessageBox::warning(this, "Внимание", "Вы выбрали товара больше чем есть");
          return;
       }
+
       if (added_items.contains(data[0]))
       {
          QMessageBox::warning(this, "Внимание", "Вы выбрали товара уже находящийся в корзине");
          return;
       }
+
       QSqlQuery query(cart);
+
       query.prepare("INSERT INTO Goods (id, Name, Price, Amount) values (:id, :Name, :Price, :Amount)");
       query.bindValue(":id", data[0]);
       query.bindValue(":Name", data[1]);
+
       if (amount >= 10)
       {
          query.bindValue(":Price", data[3]); //bulk
@@ -79,7 +90,9 @@ void DialogCreateOrder::on_pushButton_add_clicked()
       {
          query.bindValue(":Price", data[2]); //retail
       }
+
       query.bindValue(":Amount", amount);
+
       if (!query.exec())
       {
          QSqlError err = query.lastError();
@@ -149,6 +162,7 @@ void DialogCreateOrder::calculate_total()
    ui->lineEdit_total->setText(QString::number(total));
 }
 
+//Create order
 void DialogCreateOrder::on_pushButton_create_clicked()
 {
    if (ui->lineEdit_total->text() == "0")
@@ -167,7 +181,7 @@ void DialogCreateOrder::on_pushButton_create_clicked()
    insert_query_orders_db.prepare("INSERT INTO Orders (status, id_client, discount) values (0, :id_client, :discount)");
    insert_query_orders_db.bindValue(":id_client", id_client);
    insert_query_orders_db.bindValue(":discount", ui->lineEdit_discount->text().toDouble());
-   //insert_query_orders_db.bindValue(":total", ui->lineEdit_total->text().toDouble());
+
    if (!insert_query_orders_db.exec())
    {
       QSqlError err = insert_query_orders_db.lastError();
