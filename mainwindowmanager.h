@@ -6,6 +6,7 @@
 #include <QSqlError>
 #include <QSqlQuery>
 #include <QSqlTableModel>
+#include <QSqlQueryModel>
 
 namespace Ui {
 class MainWindowManager;
@@ -24,17 +25,20 @@ private slots:
 
    void on_editButton_manager_goods_clicked();
 
-   void on_tableView_manager_goods_clicked(const QModelIndex&index);
-
    void on_discountButton_manager_goods_clicked();
 
+   void on_editButton_manager_clients_clicked();
+
 private:
+   void update_model_users();
+   void update_model_goods();
+   void update_model_orders();
+
    Ui::MainWindowManager *ui;
    QSqlDatabase db;
-   QSqlTableModel *users_model;
-   QSqlTableModel *goods_model;
-   QSqlTableModel *orders_model;
-   int row;
+   QSqlQueryModel *users_model;
+   QSqlQueryModel *goods_model;
+   QSqlQueryModel *orders_model;
 };
 
 #endif // MAINWINDOWMANAGER_H
