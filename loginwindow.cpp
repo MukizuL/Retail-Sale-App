@@ -24,56 +24,56 @@ LoginWindow::~LoginWindow()
 
 void LoginWindow::on_signin_clicked()
 {
+   if (ui->login->text().isEmpty() || ui->password->text().isEmpty())
+   {
+      QMessageBox::warning(this, "Внимание", "Введите корректные данные.");
+      return;
+   }
+
    QString   login       = ui->login->text();
    QString   password    = ui->password->text();
    int       permissions = 0;
    QSqlQuery account(db);
 
-   account.prepare("SELECT password, perms, Name, id FROM Users WHERE login = :login");
-
+   account.prepare("SELECT perms, Name, id FROM Users WHERE login = :login AND password = :password");
    account.bindValue(":login", login);
-   account.exec();
+   account.bindValue(":password", password);
+
+   if (!account.exec())
+   {
+      QSqlError err = account.lastError();
+      QMessageBox::critical(this, "Ошибка", err.databaseText() + "\n" + err.driverText());
+      return;
+   }
+
    if (account.next())
    {
-      if (password == account.value(0).toString())
+      permissions = account.value(0).toInt();
+      QMessageBox::information(this, "Успех", "Добрый день, " + account.value(1).toString());
+      switch (permissions)
       {
-         permissions = account.value(1).toInt();
-         QMessageBox::information(this, "Успех", "Добрый день, " + account.value(2).toString());
-         switch (permissions)
-         {
-         case 0:
-            main_window = new MainWindowManager();
-            break;
+      case 0:
+         main_window = new MainWindowManager();
+         break;
 
-         case 1:
-            main_window = new MainWindowWarehouse();
-            break;
+      case 1:
+         main_window = new MainWindowWarehouse();
+         break;
 
-         case 2:
-            main_window = new MainWindowClient(account.value(3).toInt());
-            break;
-         }
-         if (main_window)
-         {
-            main_window->show();
-            accept();
-         }
+      case 2:
+         main_window = new MainWindowClient(account.value(2).toInt());
+         break;
       }
-      else
+      if (main_window)
       {
-         QMessageBox::warning(this, "Ошибка", "Введён неправильный логин/пароль!");
+         main_window->show();
+         accept();
       }
    }
    else
    {
-      QMessageBox::warning(this, "Ошибка", "База данных не доступна!");
+      QMessageBox::critical(this, "Ошибка", "Введён неправильный логин/пароль!");
    }
-}
-
-void LoginWindow::on_db_reconnect_clicked()
-{
-   db.close();
-   db.open();
 }
 
 void LoginWindow::db_connect()

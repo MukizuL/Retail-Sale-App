@@ -26,8 +26,6 @@ public:
 private slots:
    void on_signin_clicked();
 
-   void on_db_reconnect_clicked();
-
 private:
    Ui::LoginWindow *ui;
    QMainWindow *main_window = nullptr;
