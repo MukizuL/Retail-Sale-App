@@ -4,6 +4,7 @@
 #include "dialog_edit_goods_manager.h"
 #include "dialog_discount_manager.h"
 #include "dialog_edit_clients_manager.h"
+#include "dialog_view_orders.h"
 
 MainWindowManager::MainWindowManager(QWidget *parent)
    : QMainWindow(parent)
@@ -36,7 +37,7 @@ MainWindowManager::~MainWindowManager()
 
 void MainWindowManager::on_addButton_manager_goods_clicked()
 {
-   QDialog *dialog = new DialogAddGoodsManager(db, this);
+   QDialog *dialog = new DialogAddGoodsManager(this);
 
    dialog->exec();
    update_model_goods();
@@ -169,5 +170,29 @@ void MainWindowManager::on_addButton_manager_clients_clicked()
 
    dialog->exec();
    update_model_users();
+   delete dialog;
+}
+
+//View order
+void MainWindowManager::on_showButton_manager_orders_clicked()
+{
+   QList <QModelIndex> index = ui->tableView_manager_orders->selectionModel()->selectedRows(); //index should contain only 1 item and it will
+
+   if (index.empty() || !index[0].isValid())
+   {
+      QMessageBox::warning(this, "Внимание", "Вы не выбрали заказ.");
+      return;
+   }
+   QVariant           temp;
+   QVector <QVariant> data;                                                            //id_order, date, discount, total
+
+   for (int i = 0; i < 4; i++)
+   {
+      temp = orders_model->data(orders_model->index(index[0].row(), i));
+      data.append(temp);
+   }
+   QDialog *dialog = new DialogViewOrders(data, this);
+
+   dialog->exec();
    delete dialog;
 }
