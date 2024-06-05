@@ -29,6 +29,8 @@ private slots:
 
    void on_editButton_manager_clients_clicked();
 
+   void on_addButton_manager_clients_clicked();
+
 private:
    void update_model_users();
    void update_model_goods();

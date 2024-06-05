@@ -90,6 +90,7 @@ void MainWindowManager::on_editButton_manager_clients_clicked()
    QDialog *dialog = new DialogEditClientsManager(users_model->data(users_model->index(index[0].row(), 0)).toInt(), this);
 
    dialog->exec();
+   update_model_users();
    delete dialog;
 }
 
@@ -97,7 +98,7 @@ void MainWindowManager::update_model_users()
 {
    QSqlQuery query(db);
 
-   query.prepare("SELECT Users.id, IFNULL(Users.LegalName, 'Физическое лицо') AS 'Клиент', Users.Surname AS 'Фамилия', Users.Name AS 'Имя', "
+   query.prepare("SELECT Users.id, CASE IFNULL(Users.LegalName, CAST(Users.perms AS TEXT)) WHEN '0' THEN 'Менеджер' WHEN '1' THEN 'Склад' WHEN '2' THEN 'Физическое лицо' ELSE Users.LegalName END AS 'Клиент', Users.Surname AS 'Фамилия', Users.Name AS 'Имя', "
                  "CASE CAST(Users.Perms AS TEXT) "
                  "WHEN '0' THEN 'Менеджер' "
                  "WHEN '1' THEN 'Склад' "
@@ -157,4 +158,14 @@ void MainWindowManager::update_model_orders()
       return;
    }
    orders_model->setQuery(std::move(query));
+}
+
+//Add user
+void MainWindowManager::on_addButton_manager_clients_clicked()
+{
+   QDialog *dialog = new DialogEditClientsManager(-1, this);
+
+   dialog->exec();
+   update_model_users();
+   delete dialog;
 }
