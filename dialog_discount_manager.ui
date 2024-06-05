@@ -7,20 +7,13 @@
     <x>0</x>
     <y>0</y>
     <width>437</width>
-    <height>144</height>
+    <height>122</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Dialog</string>
+   <string>Редактировать скидки</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout">
-   <item>
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Скидки</string>
-     </property>
-    </widget>
-   </item>
    <item>
     <layout class="QHBoxLayout" name="horizontalLayout_3">
      <property name="rightMargin">

@@ -6,6 +6,8 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QMessageBox>
+#include <QIntValidator>
+#include <QDoubleValidator>
 
 namespace Ui {
 class DialogEditGoodsManager;
@@ -28,6 +30,7 @@ private:
    Ui::DialogEditGoodsManager *ui;
    QSqlDatabase db;
    QVector <QVariant> item_data;
+   QDoubleValidator *validator_decimalUS;
 };
 
 #endif // DIALOG_EDIT_GOODS_MANAGER_H

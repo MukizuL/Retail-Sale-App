@@ -5,9 +5,18 @@ DialogEditGoodsManager::DialogEditGoodsManager(QVector <QVariant> data, QWidget 
    QDialog(parent),
    ui(new Ui::DialogEditGoodsManager)
 {
+   ui->setupUi(this);
    db        = QSqlDatabase::database();
    item_data = data;
-   ui->setupUi(this);
+
+   validator_decimalUS = new QDoubleValidator(this);
+   validator_decimalUS->setBottom(0.0);
+   validator_decimalUS->setDecimals(2);
+   validator_decimalUS->setLocale(QLocale("en_US"));
+
+   ui->lineEdit_bulk->setValidator(validator_decimalUS);
+   ui->lineEdit_retail->setValidator(validator_decimalUS);
+
    ui->lineEdit_name->setText(item_data[1].toString());
    ui->lineEdit_retail->setText(item_data[2].toString());
    ui->lineEdit_bulk->setText(item_data[3].toString());
@@ -50,6 +59,13 @@ void DialogEditGoodsManager::on_pushButton_delete_clicked()
  */
 void DialogEditGoodsManager::on_pushButton_ok_clicked()
 {
+   if (!(ui->lineEdit_bulk->hasAcceptableInput() &&
+         ui->lineEdit_retail->hasAcceptableInput()))
+   {
+      QMessageBox::warning(this, "Внимание", "Цены могут быть дробными с 2-я знаками после точки.");
+      return;
+   }
+
    QSqlQuery query;
    QString   name   = ui->lineEdit_name->text().isEmpty() ? QString() : ui->lineEdit_name->text();
    QString   retail = ui->lineEdit_retail->text().isEmpty() ? QString() : ui->lineEdit_retail->text();

@@ -6,6 +6,8 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QMessageBox>
+#include <QIntValidator>
+#include <QDoubleValidator>
 
 namespace Ui {
 class DialogAddGoodsManager;
@@ -16,7 +18,7 @@ class DialogAddGoodsManager : public QDialog
    Q_OBJECT
 
 public:
-   explicit DialogAddGoodsManager(QSqlDatabase database, QWidget *parent = nullptr);
+   explicit DialogAddGoodsManager(QWidget *parent = nullptr);
    ~DialogAddGoodsManager();
 
 private slots:
@@ -25,6 +27,7 @@ private slots:
 private:
    Ui::DialogAddGoodsManager *ui;
    QSqlDatabase db;
+   QDoubleValidator *validator_decimalUS;
 };
 
 #endif // DIALOG_ADD_GOODS_MANAGER_H

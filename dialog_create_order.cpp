@@ -8,23 +8,31 @@ DialogCreateOrder::DialogCreateOrder(QSqlDatabase database, int client, QWidget 
    ui->setupUi(this);
    db        = database;
    id_client = client;
-   cart      = QSqlDatabase::database("shopcart");
+
+   validator_int_goods = new QIntValidator(this);
+   validator_int_goods->setBottom(0);
+   validator_int_goods->setLocale(QLocale::C);
+
+   ui->lineEdit_amount->setValidator(validator_int_goods);
+
+   cart = QSqlDatabase::database("shopcart");
    if (!cart.isValid())
    {
       cart = QSqlDatabase::addDatabase("QSQLITE", "shopcart");
       cart.setDatabaseName("./cart.db");
    }
    cart.open();
-   goods_model = new QSqlTableModel(this, db);
-   cart_model  = new QSqlTableModel(this, cart);
-   goods_model->setTable("Goods");
-   cart_model->setTable("Goods");
-   goods_model->select();
+
+   goods_model = new QSqlQueryModel;
+   cart_model  = new QSqlQueryModel;
+
    calculate_total();
+
    ui->tableView_goods->setModel(goods_model);
    ui->tableView_shopcart->setModel(cart_model);
    ui->tableView_goods->setColumnHidden(0, true);
    ui->tableView_shopcart->setColumnHidden(0, true);
+
    int rowCount = cart_model->rowCount();
    for (int i = 0; i < rowCount; ++i)
    {
@@ -44,6 +52,11 @@ DialogCreateOrder::~DialogCreateOrder()
 
 void DialogCreateOrder::on_pushButton_add_clicked()
 {
+   if (!ui->lineEdit_amount->hasAcceptableInput())
+   {
+      QMessageBox::warning(this, "Внимание", "Неправильное количество товара");
+      return;
+   }
    QVariant           variant;
    QVector <QVariant> data(6);
    double             amount = ui->lineEdit_amount->text().toDouble();
@@ -56,12 +69,6 @@ void DialogCreateOrder::on_pushButton_add_clicked()
       {
          variant = goods_model->data(goods_model->index(index.row(), i));
          data[i] = variant;
-      }
-
-      if (amount <= 0)
-      {
-         QMessageBox::warning(this, "Внимание", "Выберите больше товара.");
-         return;
       }
 
       if (amount > data[5].toDouble())
@@ -130,7 +137,8 @@ void DialogCreateOrder::on_pushButton_remove_clicked()
 
 void DialogCreateOrder::calculate_total()
 {
-   cart_model->select();
+   update_model_cart();
+   update_model_goods();
    double    total    = 0;
    double    discount = 0;
    int       items    = 0; //Unique items count
@@ -160,6 +168,40 @@ void DialogCreateOrder::calculate_total()
    ui->lineEdit_discount->setText(QString::number(discount));
    total *= 1 - discount / 100;
    ui->lineEdit_total->setText(QString::number(total));
+}
+
+void DialogCreateOrder::update_model_goods()
+{
+   QSqlQuery query(db);
+
+   query.prepare("SELECT Goods.id, Goods.Name AS 'Название', Goods.Retail_cost AS 'Розничная цена', "
+                 "Goods.Bulk_cost AS 'Оптовая цена', Goods.Info AS 'Информация', Goods.Amount AS 'Количество' "
+                 "FROM Goods ORDER BY Goods.Name");
+
+   if (!query.exec())
+   {
+      QSqlError err = query.lastError();
+      QMessageBox::critical(this, "Ошибка", err.databaseText() + "\n" + err.driverText());
+      return;
+   }
+   goods_model->setQuery(std::move(query));
+}
+
+void DialogCreateOrder::update_model_cart()
+{
+   QSqlQuery query(cart);
+
+   query.prepare("SELECT Goods.id, Goods.Name AS 'Название', Goods.price AS 'Цена', "
+                 "Goods.Amount AS 'Количество' "
+                 "FROM Goods ORDER BY Goods.Name");
+
+   if (!query.exec())
+   {
+      QSqlError err = query.lastError();
+      QMessageBox::critical(this, "Ошибка", err.databaseText() + "\n" + err.driverText());
+      return;
+   }
+   cart_model->setQuery(std::move(query));
 }
 
 //Create order

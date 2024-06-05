@@ -50,7 +50,7 @@ void DialogDiscountManager::on_pushButton_ok_clicked()
          ui->lineEdit_total->hasAcceptableInput()))
    {
       QMessageBox::warning(this, "Внимание", "Скидки и количество товаров должны быть целым числом.\n"
-                           "Итог может быть дробным с 2-я знаками после делителя.");
+                           "Итог может быть дробным с 2-я знаками после точки.");
       return;
    }
    QSqlQuery query;

@@ -8,6 +8,9 @@
 #include <QSqlQuery>
 #include <QSqlTableModel>
 #include <QDebug>
+#include <QIntValidator>
+#include <QDoubleValidator>
+#include <QSqlQueryModel>
 
 namespace Ui {
 class DialogCreateOrder;
@@ -30,14 +33,17 @@ private slots:
 
 private:
    void calculate_total();
+   void update_model_goods();
+   void update_model_cart();
 
    Ui::DialogCreateOrder *ui;
    QSqlDatabase db;
    QSqlDatabase cart;
-   QSqlTableModel *goods_model;
-   QSqlTableModel *cart_model;
+   QSqlQueryModel *goods_model;
+   QSqlQueryModel *cart_model;
    QVector <int> added_items;
    int id_client;
+   QIntValidator *validator_int_goods;
 };
 
 #endif // DIALOG_CREATE_ORDER_H
