@@ -16,7 +16,7 @@ class DialogEditClientsManager : public QDialog
    Q_OBJECT
 
 public:
-   explicit DialogEditClientsManager(int id_user, QWidget *parent = nullptr);
+   explicit DialogEditClientsManager(int id_user, bool registration, QWidget *parent = nullptr);
    ~DialogEditClientsManager();
 
 private slots:

@@ -1,7 +1,7 @@
 #include "dialog_edit_clients_manager.h"
 #include "ui_dialog_edit_clients_manager.h"
 
-DialogEditClientsManager::DialogEditClientsManager(int id_user, QWidget *parent) :
+DialogEditClientsManager::DialogEditClientsManager(int id_user, bool registration, QWidget *parent) :
    QDialog(parent),
    ui(new Ui::DialogEditClientsManager)
 {
@@ -18,6 +18,12 @@ DialogEditClientsManager::DialogEditClientsManager(int id_user, QWidget *parent)
       setWindowTitle("Редактировать пользователя");
       update_view();
       adjustSize();
+   }
+
+   ui->ComboBox->setCurrentIndex(2);
+   if (registration)
+   {
+      ui->ComboBox->setEnabled(false);
    }
    ui->LineEdit_phone->setInputMask("+9(999)999-99-99");
 }
@@ -70,11 +76,9 @@ void DialogEditClientsManager::on_pushButton_ok_clicked()
 {
    if (user == -1) //We create new user
    {
-      ui->ComboBox->setCurrentIndex(2);
       if (ui->LineEdit_login->text().isEmpty() ||
           ui->LineEdit_surname->text().isEmpty() ||
           ui->LineEdit_name->text().isEmpty() ||
-          ui->LineEdit_otchestvo->text().isEmpty() ||
           ui->LineEdit_phone->text().isEmpty() ||
           ui->LineEdit_address->text().isEmpty() ||
           ui->LineEdit_newpass->text().isEmpty())

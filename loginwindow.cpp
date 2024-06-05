@@ -3,6 +3,7 @@
 #include "mainwindowclient.h"
 #include "mainwindowmanager.h"
 #include "mainwindowwarehouse.h"
+#include "dialog_edit_clients_manager.h"
 
 LoginWindow::LoginWindow(QWidget *parent)
    : QDialog(parent)
@@ -91,4 +92,13 @@ void LoginWindow::db_connect()
       QSqlError err = db.lastError();
       QMessageBox::critical(this, "No", err.text());
    }
+}
+
+//Registration
+void LoginWindow::on_register_2_clicked()
+{
+   QDialog *dialog = new DialogEditClientsManager(-1, true, this);
+
+   dialog->exec();
+   delete dialog;
 }

@@ -26,6 +26,8 @@ public:
 private slots:
    void on_signin_clicked();
 
+   void on_register_2_clicked();
+
 private:
    Ui::LoginWindow *ui;
    QMainWindow *main_window = nullptr;

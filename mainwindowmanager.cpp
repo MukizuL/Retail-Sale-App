@@ -90,7 +90,7 @@ void MainWindowManager::on_editButton_manager_clients_clicked()
       return;
    }
 
-   QDialog *dialog = new DialogEditClientsManager(users_model->data(users_model->index(index[0].row(), 0)).toInt(), this);
+   QDialog *dialog = new DialogEditClientsManager(users_model->data(users_model->index(index[0].row(), 0)).toInt(), false, this);
 
    dialog->exec();
    update_model_users();
@@ -166,7 +166,7 @@ void MainWindowManager::update_model_orders()
 //Add user
 void MainWindowManager::on_addButton_manager_clients_clicked()
 {
-   QDialog *dialog = new DialogEditClientsManager(-1, this);
+   QDialog *dialog = new DialogEditClientsManager(-1, false, this);
 
    dialog->exec();
    update_model_users();
