@@ -69,6 +69,7 @@ void MainWindowManager::on_editButton_manager_goods_clicked()
    delete dialog;
 }
 
+//Edit discount
 void MainWindowManager::on_discountButton_manager_goods_clicked()
 {
    QDialog *dialog = new DialogDiscountManager(this);
@@ -77,6 +78,7 @@ void MainWindowManager::on_discountButton_manager_goods_clicked()
    delete dialog;
 }
 
+//Edit user
 void MainWindowManager::on_editButton_manager_clients_clicked()
 {
    QList <QModelIndex> index = ui->tableView_manager_clients->selectionModel()->selectedRows();

@@ -6,6 +6,8 @@
 #include <QSqlQuery>
 #include <QSqlError>
 #include <QMessageBox>
+#include <QIntValidator>
+#include <QDoubleValidator>
 
 namespace Ui {
 class DialogDiscountManager;
@@ -25,6 +27,9 @@ private slots:
 private:
    Ui::DialogDiscountManager *ui;
    QSqlDatabase db;
+   QIntValidator *validator_int_discount;
+   QIntValidator *validator_int_goods;
+   QDoubleValidator *validator_decimalUS;
 };
 
 #endif // DIALOG_DISCOUNT_MANAGER_H
