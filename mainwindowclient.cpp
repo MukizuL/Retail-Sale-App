@@ -48,7 +48,9 @@ void MainWindowClient::update_model()
                   "CAST(SUM(Items.amount * Items.price) * (1 - Orders.discount / 100) AS TEXT) || ' руб.' AS 'Итог'"
                   "FROM Orders "
                   "JOIN Items ON Items.id_order = Orders.id "
+                  "WHERE Orders.id_client = :id_client "
                   "GROUP BY Orders.id");
+   orders.bindValue(":id_client", id_client);
 
    if (!orders.exec())
    {
