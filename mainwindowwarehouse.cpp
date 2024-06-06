@@ -19,6 +19,7 @@ MainWindowWarehouse::MainWindowWarehouse(int user, QWidget *parent)
    ui->tableView_warehouse_orders->setModel(orders_model);
    adjustSize();
    ui->tableView_warehouse_goods->setColumnHidden(0, true);
+   adjustSize();
 }
 
 MainWindowWarehouse::~MainWindowWarehouse()
