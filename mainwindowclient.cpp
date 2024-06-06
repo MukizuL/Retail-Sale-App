@@ -25,7 +25,7 @@ MainWindowClient::~MainWindowClient()
 //Create order
 void MainWindowClient::on_create_orderButton_client_clicked()
 {
-   QDialog *dialog = new DialogCreateOrder(db, id_client, this);
+   QDialog *dialog = new DialogCreateOrder(id_client, this);
 
    dialog->exec();
    update_model();
