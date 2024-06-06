@@ -5,12 +5,14 @@
 #include "dialog_discount_manager.h"
 #include "dialog_edit_clients_manager.h"
 #include "dialog_view_orders.h"
+#include "dialog_profile_edit.h"
 
-MainWindowManager::MainWindowManager(QWidget *parent)
+MainWindowManager::MainWindowManager(int user, QWidget *parent)
    : QMainWindow(parent)
    , ui(new Ui::MainWindowManager)
 {
    ui->setupUi(this);
+   id_user_     = user;
    db           = QSqlDatabase::database();
    users_model  = new QSqlQueryModel;
    goods_model  = new QSqlQueryModel;
@@ -23,7 +25,6 @@ MainWindowManager::MainWindowManager(QWidget *parent)
    ui->tableView_manager_orders->setModel(orders_model);
    ui->tableView_manager_clients->setColumnHidden(0, true);
    ui->tableView_manager_goods->setColumnHidden(0, true);
-   ui->tableView_manager_orders->setColumnHidden(0, true);
    adjustSize();
 }
 
@@ -144,7 +145,7 @@ void MainWindowManager::update_model_orders()
 {
    QSqlQuery query(db);
 
-   query.prepare("SELECT Orders.id, Orders.id AS 'Номер заказа', IFNULL(Users.LegalName, 'Физическое лицо') AS 'Клиент', "
+   query.prepare("SELECT Orders.id AS 'Номер заказа', IFNULL(Users.LegalName, 'Физическое лицо') AS 'Клиент', "
                  "CASE CAST(Orders.status AS TEXT)"
                  "WHEN '0' THEN 'Ожидает оплаты'"
                  "WHEN '1' THEN 'Оплачен'"
@@ -196,9 +197,28 @@ void MainWindowManager::on_showButton_manager_orders_clicked()
       temp = orders_model->data(orders_model->index(index[0].row(), i));
       data.append(temp);
    }
-   QDialog *dialog = new DialogViewOrders(data, this);
+   QDialog *dialog = new DialogViewOrders(data, false, this);
 
    dialog->exec();
    update_model_orders();
+   delete dialog;
+}
+
+//Profile edit
+void MainWindowManager::on_action_profile_triggered()
+{
+   QDialog *dialog = new DialogProfileEdit(false, id_user_, this);
+
+   dialog->exec();
+   update_model_users();
+   delete dialog;
+}
+
+//Password edit
+void MainWindowManager::on_action_password_triggered()
+{
+   QDialog *dialog = new DialogProfileEdit(true, id_user_, this);
+
+   dialog->exec();
    delete dialog;
 }
