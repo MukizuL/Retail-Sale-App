@@ -29,7 +29,7 @@ private slots:
 
    void on_action_profile_triggered();
 
-   void on_action_triggered();
+   void on_action_password_triggered();
 
 private:
    void update_model();

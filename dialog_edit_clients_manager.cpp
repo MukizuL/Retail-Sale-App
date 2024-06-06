@@ -38,7 +38,11 @@ void DialogEditClientsManager::update_view()
    QSqlQuery query(db);
 
    query.prepare("SELECT Users.login, "
-                 "CASE IFNULL(Users.LegalName, CAST(Users.perms AS TEXT)) WHEN '0' THEN 'Менеджер' WHEN '1' THEN 'Склад' WHEN '2' THEN 'Физическое лицо' ELSE Users.LegalName END, "
+                 "CASE IFNULL(Users.LegalName, CAST(Users.perms AS TEXT)) "
+                 "WHEN '0' THEN 'Менеджер' "
+                 "WHEN '1' THEN 'Склад' "
+                 "WHEN '2' THEN 'Физическое лицо' "
+                 "ELSE Users.LegalName END, "
                  "Users.Surname, Users.Name, Users.Otchestvo, Users.phone, Users.Addres, Users.perms "
                  "FROM Users WHERE Users.id = :id");
    query.bindValue(":id", user);

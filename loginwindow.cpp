@@ -54,11 +54,11 @@ void LoginWindow::on_signin_clicked()
       switch (permissions)
       {
       case 0:
-         main_window = new MainWindowManager();
+         main_window = new MainWindowManager(account.value(2).toInt());
          break;
 
       case 1:
-         main_window = new MainWindowWarehouse();
+         main_window = new MainWindowWarehouse(account.value(2).toInt());
          break;
 
       case 2:

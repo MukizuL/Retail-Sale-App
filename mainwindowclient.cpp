@@ -79,7 +79,7 @@ void MainWindowClient::on_pushButton_show_clicked()
       temp = orders_model->data(orders_model->index(index[0].row(), i));
       data.append(temp);
    }
-   QDialog *dialog = new DialogViewOrders(data, this);
+   QDialog *dialog = new DialogViewOrders(data, false, this);
 
    dialog->exec();
    update_model();
@@ -96,7 +96,7 @@ void MainWindowClient::on_action_profile_triggered()
 }
 
 //Password edit
-void MainWindowClient::on_action_triggered()
+void MainWindowClient::on_action_password_triggered()
 {
    QDialog *dialog = new DialogProfileEdit(true, id_client, this);
 
@@ -115,9 +115,9 @@ void MainWindowClient::on_delete_orderButton_client_clicked()
       return;
    }
 
-   if (orders_model->data(orders_model->index(index[0].row(), 1)).toInt() == 4)
+   if (orders_model->data(orders_model->index(index[0].row(), 1)).toInt() >= 3)
    {
-      QMessageBox::warning(this, "Внимание", "Отправленный заказ нельзя отменить.");
+      QMessageBox::warning(this, "Внимание", "Данный заказ уже нельзя отменить.");
       return;
    }
 

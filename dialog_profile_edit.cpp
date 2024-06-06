@@ -67,7 +67,10 @@ void DialogProfileEdit::update_view()
 {
    QSqlQuery query(db);
 
-   query.prepare("SELECT Users.login, IFNULL(Users.LegalName, 'Физическое лицо'), "
+   query.prepare("SELECT Users.login, CASE IFNULL(Users.LegalName, CAST(Users.perms AS TEXT)) "
+                 "WHEN '0' THEN 'Менеджер' WHEN '1' THEN 'Склад' "
+                 "WHEN '2' THEN 'Физическое лицо' "
+                 "ELSE Users.LegalName END, "
                  "Users.Surname, Users.Name, Users.Otchestvo, Users.phone, Users.Addres "
                  "FROM Users WHERE Users.id = :id");
    query.bindValue(":id", user);
@@ -81,8 +84,18 @@ void DialogProfileEdit::update_view()
 
    query.next();
 
+   if (query.value(1).toString() == "Физическое лицо" ||
+       query.value(1).toString() == "Склад" ||
+       query.value(1).toString() == "Менеджер")
+   {
+      ui->LineEdit_legalname->setPlaceholderText(query.value(1).toString());
+   }
+   else
+   {
+      ui->LineEdit_legalname->setText(query.value(1).toString());
+   }
+
    ui->LineEdit_login->setText(query.value(0).toString());
-   ui->LineEdit_legalname->setText(query.value(1).toString());
    ui->LineEdit_surname->setText(query.value(2).toString());
    ui->LineEdit_name->setText(query.value(3).toString());
    ui->LineEdit_otchestvo->setText(query.value(4).toString());
