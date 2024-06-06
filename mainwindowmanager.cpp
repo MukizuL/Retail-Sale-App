@@ -101,7 +101,12 @@ void MainWindowManager::update_model_users()
 {
    QSqlQuery query(db);
 
-   query.prepare("SELECT Users.id, CASE IFNULL(Users.LegalName, CAST(Users.perms AS TEXT)) WHEN '0' THEN 'Менеджер' WHEN '1' THEN 'Склад' WHEN '2' THEN 'Физическое лицо' ELSE Users.LegalName END AS 'Клиент', Users.Surname AS 'Фамилия', Users.Name AS 'Имя', "
+   query.prepare("SELECT Users.id, "
+                 "CASE IFNULL(Users.LegalName, CAST(Users.perms AS TEXT)) "
+                 "WHEN '0' THEN 'Менеджер' WHEN '1' THEN 'Склад' "
+                 "WHEN '2' THEN 'Физическое лицо' "
+                 "ELSE Users.LegalName END AS 'Клиент', "
+                 "Users.Surname AS 'Фамилия', Users.Name AS 'Имя', "
                  "CASE CAST(Users.Perms AS TEXT) "
                  "WHEN '0' THEN 'Менеджер' "
                  "WHEN '1' THEN 'Склад' "
@@ -194,5 +199,6 @@ void MainWindowManager::on_showButton_manager_orders_clicked()
    QDialog *dialog = new DialogViewOrders(data, this);
 
    dialog->exec();
+   update_model_orders();
    delete dialog;
 }

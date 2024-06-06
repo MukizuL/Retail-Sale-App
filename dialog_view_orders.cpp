@@ -31,8 +31,10 @@ void DialogViewOrders::update_model()
                  "WHERE Orders.id = :id");
    query.bindValue(":id", items[0].toInt());
 
-   order.prepare("SELECT Orders.id, Orders.Date, Orders.Discount, SUM(Items.amount * Items.price) * (1 - Orders.discount / 100) "
+   order.prepare("SELECT Orders.id, Orders.Date, Orders.Discount, SUM(Items.amount * Items.price) * (1 - Orders.discount / 100), "
+                 "Users.LegalName, Users.Surname, Users.name, Users.Otchestvo "
                  "FROM Orders "
+                 "JOIN Users ON Orders.id_client = Users.id "
                  "JOIN Items ON Items.id_order = Orders.id "
                  "WHERE Orders.id = :id");
    order.bindValue(":id", items[0].toInt());
@@ -52,9 +54,13 @@ void DialogViewOrders::update_model()
    }
 
    order.next();
-   ui->label->setText("Заказ №" + order.value(0).toString() + " Дата: " + order.value(1).toString());
+   id_order = order.value(0);
+
+   ui->label_top_1->setText("Заказ №" + order.value(0).toString() + " Дата: " + order.value(1).toString());
    ui->lineEdit_discount->setText(order.value(2).toString());
    ui->lineEdit_total->setText(order.value(3).toString());
+   ui->label_top_2->setText("Клиент: " + order.value(4).toString() + " ФИО: " + order.value(5).toString() + " " + order.value(6).toString() + " " + order.value(7).toString());
+
 
    items_model->setQuery(std::move(query));
 }
@@ -132,4 +138,83 @@ void DialogViewOrders::on_pushButton_export_clicked()
       out << Qt::endl;
    }
    file_out.close();
+}
+
+void DialogViewOrders::on_pushButton_cancel_order_clicked()
+{
+   QMessageBox::StandardButton reply = QMessageBox::question(this, "Отменить заказ", "Вы уверены, что хотите отменить данный заказ?",
+                                                             QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+
+   if (reply == QMessageBox::No)
+   {
+      return;
+   }
+
+   db.transaction();
+
+   QSqlQuery select_items(db);
+   QSqlQuery update_goods(db);
+   QSqlQuery delete_items(db);
+   QSqlQuery delete_orders(db);
+
+   select_items.prepare("SELECT Items.id_good, Items.amount FROM Items WHERE Items.id_order = :id_order");
+   select_items.bindValue(":id_order", id_order);
+
+   if (!select_items.exec())
+   {
+      QSqlError err = select_items.lastError();
+      QMessageBox::critical(this, "Ошибка", err.databaseText() + "\n" + err.driverText());
+      db.rollback();
+      return;
+   }
+
+   QVector <QVariantList> data(2); //id_good, amount
+
+   while (select_items.next())
+   {
+      data[0].append(select_items.value(0));
+      data[1].append(select_items.value(1));
+   }
+
+   update_goods.prepare("UPDATE Goods SET amount = amount + ? WHERE id = ?");
+   update_goods.addBindValue(data[1]);
+   update_goods.addBindValue(data[0]);
+
+   if (!update_goods.execBatch())
+   {
+      QSqlError err = update_goods.lastError();
+      QMessageBox::critical(this, "Ошибка", err.databaseText() + "\n" + err.driverText());
+      db.rollback();
+      return;
+   }
+
+   delete_items.prepare("DELETE FROM Items WHERE Items.id_order = :id_order");
+   delete_items.bindValue(":id_order", id_order);
+
+   if (!delete_items.exec())
+   {
+      QSqlError err = delete_items.lastError();
+      QMessageBox::critical(this, "Ошибка", err.databaseText() + "\n" + err.driverText());
+      db.rollback();
+      return;
+   }
+
+   delete_orders.prepare("DELETE FROM Orders WHERE Orders.id = :id_order");
+   delete_orders.bindValue(":id_order", id_order);
+
+   if (!delete_orders.exec())
+   {
+      QSqlError err = delete_orders.lastError();
+      QMessageBox::critical(this, "Ошибка", err.databaseText() + "\n" + err.driverText());
+      db.rollback();
+      return;
+   }
+
+   if (!db.commit())
+   {
+      QMessageBox::critical(this, "Ошибка", "Не удалось удалить заказ.");
+      db.rollback();
+      return;
+   }
+   accept();
 }

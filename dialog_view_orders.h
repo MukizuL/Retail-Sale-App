@@ -25,6 +25,8 @@ public:
 private slots:
    void on_pushButton_export_clicked();
 
+   void on_pushButton_cancel_order_clicked();
+
 private:
    void update_model();
 
@@ -32,6 +34,7 @@ private:
    QSqlDatabase db;
    QSqlQueryModel *items_model;
    QVector <QVariant> items;
+   QVariant id_order;
 };
 
 #endif // DIALOG_VIEW_ORDERS_H
