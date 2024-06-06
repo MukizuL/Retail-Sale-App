@@ -1,12 +1,12 @@
 #include "dialog_create_order.h"
 #include "ui_dialog_create_order.h"
 
-DialogCreateOrder::DialogCreateOrder(QSqlDatabase database, int client, QWidget *parent) :
+DialogCreateOrder::DialogCreateOrder(int client, QWidget *parent) :
    QDialog(parent),
    ui(new Ui::DialogCreateOrder)
 {
    ui->setupUi(this);
-   db        = database;
+   db        = QSqlDatabase::database();
    id_client = client;
 
    validator_int_goods = new QIntValidator(this);
@@ -50,6 +50,7 @@ DialogCreateOrder::~DialogCreateOrder()
    cart.close();
 }
 
+//Add item to cart
 void DialogCreateOrder::on_pushButton_add_clicked()
 {
    if (!ui->lineEdit_amount->hasAcceptableInput())
@@ -85,9 +86,10 @@ void DialogCreateOrder::on_pushButton_add_clicked()
 
       QSqlQuery query(cart);
 
-      query.prepare("INSERT INTO Goods (id, Name, Price, Amount) values (:id, :Name, :Price, :Amount)");
+      query.prepare("INSERT INTO Goods (id, Name, Price, Amount, id_client) values (:id, :Name, :Price, :Amount, :id_client)");
       query.bindValue(":id", data[0]);
       query.bindValue(":Name", data[1]);
+      query.bindValue(":id_client", id_client);
 
       if (amount >= 10)
       {
@@ -121,9 +123,10 @@ void DialogCreateOrder::on_pushButton_remove_clicked()
    for (auto index : selected)
    {
       variant = cart_model->data(cart_model->index(index.row(), 0));
-      query.prepare("DELETE FROM Goods WHERE id = :id");
-
+      query.prepare("DELETE FROM Goods WHERE id = :id AND id_client = :id_client");
       query.bindValue(":id", variant);
+      query.bindValue(":id_client", id_client);
+
       if (!query.exec())
       {
          QSqlError err = query.lastError();
@@ -144,8 +147,16 @@ void DialogCreateOrder::calculate_total()
    int       items    = 0; //Unique items count
    QSqlQuery discount_db(db);
    QSqlQuery query(cart);
-   query.prepare("SELECT Price, Amount FROM Goods");
-   query.exec();
+   query.prepare("SELECT Price, Amount FROM Goods WHERE id_client = :id_client");
+   query.bindValue(":id_client", id_client);
+
+   if (!query.exec())
+   {
+      QSqlError err = query.lastError();
+      QMessageBox::critical(this, "Error", err.databaseText() + "\n" + err.driverText());
+      return;
+   }
+
    while (query.next())
    {
       total += query.value(0).toDouble() * query.value(1).toDouble();    //Price * Amount
@@ -166,6 +177,7 @@ void DialogCreateOrder::calculate_total()
    }
 
    ui->lineEdit_discount->setText(QString::number(discount));
+   ui->LineEdit_total_no_discount->setText(QString::number(total));
    total *= 1 - discount / 100;
    ui->lineEdit_total->setText(QString::number(total));
 }
@@ -193,7 +205,8 @@ void DialogCreateOrder::update_model_cart()
 
    query.prepare("SELECT Goods.id, Goods.Name AS 'Название', Goods.price AS 'Цена', "
                  "Goods.Amount AS 'Количество' "
-                 "FROM Goods ORDER BY Goods.Name");
+                 "FROM Goods WHERE id_client = :id_client ORDER BY Goods.Name");
+   query.bindValue(":id_client", id_client);
 
    if (!query.exec())
    {
@@ -234,7 +247,8 @@ void DialogCreateOrder::on_pushButton_create_clicked()
 
    //Get all items from Cart
    int id_order = insert_query_orders_db.lastInsertId().toInt();
-   select_query_cart.prepare("SELECT id, price, amount FROM Goods");
+   select_query_cart.prepare("SELECT id, price, amount FROM Goods WHERE id_client = :id_client");
+   select_query_cart.bindValue(":id_client", id_client);
 
    if (!select_query_cart.exec())
    {
@@ -319,6 +333,7 @@ void DialogCreateOrder::on_pushButton_create_clicked()
    }
    QMessageBox::information(this, "Успех", "Заказ создан и ждёт оплаты");
    QSqlQuery clean_cart(cart);
-   clean_cart.exec("DELETE FROM Goods");
+   clean_cart.exec("DELETE FROM Goods WHERE id_client = " + QString::number(id_client) + "");
+
    accept();
 }

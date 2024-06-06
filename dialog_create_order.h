@@ -21,7 +21,7 @@ class DialogCreateOrder : public QDialog
    Q_OBJECT
 
 public:
-   explicit DialogCreateOrder(QSqlDatabase database, int client, QWidget *parent = nullptr);
+   explicit DialogCreateOrder(int client, QWidget *parent = nullptr);
    ~DialogCreateOrder();
 
 private slots:
