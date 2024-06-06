@@ -197,7 +197,7 @@ void MainWindowManager::on_showButton_manager_orders_clicked()
       temp = orders_model->data(orders_model->index(index[0].row(), i));
       data.append(temp);
    }
-   QDialog *dialog = new DialogViewOrders(data, false, this);
+   QDialog *dialog = new DialogViewOrders(data, false, true, this);
 
    dialog->exec();
    update_model_orders();

@@ -79,7 +79,7 @@ void MainWindowClient::on_pushButton_show_clicked()
       temp = orders_model->data(orders_model->index(index[0].row(), i));
       data.append(temp);
    }
-   QDialog *dialog = new DialogViewOrders(data, false, this);
+   QDialog *dialog = new DialogViewOrders(data, false, false, this);
 
    dialog->exec();
    update_model();

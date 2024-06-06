@@ -19,7 +19,7 @@ class DialogViewOrders : public QDialog
    Q_OBJECT
 
 public:
-   explicit DialogViewOrders(QVector <QVariant> selected_order, QWidget *parent = nullptr);
+   explicit DialogViewOrders(QVector <QVariant> selected_order, bool warehouse, bool manager, QWidget *parent = nullptr);
    ~DialogViewOrders();
 
 private slots:
@@ -27,8 +27,13 @@ private slots:
 
    void on_pushButton_cancel_order_clicked();
 
+   void on_pushButton_completed_clicked();
+
 private:
    void update_model();
+
+   bool manager_;
+   int status_;
 
    Ui::DialogViewOrders *ui;
    QSqlDatabase db;

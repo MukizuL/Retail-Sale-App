@@ -1,7 +1,7 @@
 #include "dialog_view_orders.h"
 #include "ui_dialog_view_orders.h"
 
-DialogViewOrders::DialogViewOrders(QVector <QVariant> selected_order, QWidget *parent) :
+DialogViewOrders::DialogViewOrders(QVector <QVariant> selected_order, bool warehouse, bool manager, QWidget *parent) :
    QDialog(parent),
    ui(new Ui::DialogViewOrders)
 {
@@ -11,6 +11,7 @@ DialogViewOrders::DialogViewOrders(QVector <QVariant> selected_order, QWidget *p
    items       = std::move(selected_order);
    update_model();
    ui->tableView->setModel(items_model);
+   ui->pushButton_completed->setHidden(!warehouse);
 }
 
 DialogViewOrders::~DialogViewOrders()
@@ -32,7 +33,8 @@ void DialogViewOrders::update_model()
    query.bindValue(":id", items[0].toInt());
 
    order.prepare("SELECT Orders.id, Orders.Date, Orders.Discount, SUM(Items.amount * Items.price) * (1 - Orders.discount / 100), "
-                 "Users.LegalName, Users.Surname, Users.name, Users.Otchestvo "
+                 "Users.LegalName, Users.Surname, Users.name, Users.Otchestvo, "
+                 "Orders.status "
                  "FROM Orders "
                  "JOIN Users ON Orders.id_client = Users.id "
                  "JOIN Items ON Items.id_order = Orders.id "
@@ -56,15 +58,45 @@ void DialogViewOrders::update_model()
    order.next();
    id_order = order.value(0);
 
-   ui->label_top_1->setText("Заказ №" + order.value(0).toString() + " Дата: " + order.value(1).toString());
+   status_ = order.value(8).toInt();
+
+   QString status;
+   switch (order.value(8).toInt())
+   {
+   case 0:
+      status = "Ожидает оплаты";
+      break;
+
+   case 1:
+      status = "Оплачен";
+      break;
+
+   case 2:
+      status = "Собирается";
+      break;
+
+   case 3:
+      status = "Собран";
+      break;
+
+   case 4:
+      status = "Отправлен";
+      break;
+
+   default:
+      status = "Неизвестный статус";
+      break;
+   }
+
+   ui->label_top_1->setText("Заказ №" + order.value(0).toString() + " Дата: " + order.value(1).toString() + " Статус: " + status);
    ui->lineEdit_discount->setText(order.value(2).toString());
    ui->lineEdit_total->setText(order.value(3).toString());
    ui->label_top_2->setText("Клиент: " + order.value(4).toString() + " ФИО: " + order.value(5).toString() + " " + order.value(6).toString() + " " + order.value(7).toString());
 
-
    items_model->setQuery(std::move(query));
 }
 
+//Export
 void DialogViewOrders::on_pushButton_export_clicked()
 {
    QString filename = QFileDialog::getSaveFileName(this, "Сохранить", QCoreApplication::applicationDirPath() + "/export/export.txt",
@@ -140,6 +172,7 @@ void DialogViewOrders::on_pushButton_export_clicked()
    file_out.close();
 }
 
+//Cancel order
 void DialogViewOrders::on_pushButton_cancel_order_clicked()
 {
    QMessageBox::StandardButton reply = QMessageBox::question(this, "Отменить заказ", "Вы уверены, что хотите отменить данный заказ?",
@@ -147,6 +180,12 @@ void DialogViewOrders::on_pushButton_cancel_order_clicked()
 
    if (reply == QMessageBox::No)
    {
+      return;
+   }
+
+   if (!manager_ && status_ >= 3)
+   {
+      QMessageBox::warning(this, "Внимание", "Данный заказ уже нельзя отменить.");
       return;
    }
 
@@ -217,4 +256,20 @@ void DialogViewOrders::on_pushButton_cancel_order_clicked()
       return;
    }
    accept();
+}
+
+//Complete order
+void DialogViewOrders::on_pushButton_completed_clicked()
+{
+   QMessageBox::StandardButton reply = QMessageBox::question(this, "Собрать заказ", "Вы уверены, что всё присутствует?",
+                                                             QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
+
+   if (reply == QMessageBox::No)
+   {
+      return;
+   }
+
+   db.transaction();
+
+   QSqlQuery query(db);
 }
