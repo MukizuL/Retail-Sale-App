@@ -261,6 +261,12 @@ void DialogViewOrders::on_pushButton_cancel_order_clicked()
 //Complete order
 void DialogViewOrders::on_pushButton_completed_clicked()
 {
+   if (status_ >= 3)
+   {
+      QMessageBox::warning(this, "Внимание", "Заказ уже собран.");
+      return;
+   }
+
    QMessageBox::StandardButton reply = QMessageBox::question(this, "Собрать заказ", "Вы уверены, что всё присутствует?",
                                                              QMessageBox::Yes | QMessageBox::No, QMessageBox::No);
 
@@ -272,4 +278,23 @@ void DialogViewOrders::on_pushButton_completed_clicked()
    db.transaction();
 
    QSqlQuery query(db);
+
+   query.prepare("UPDATE Orders SET status = 3 WHERE id = ?");
+   query.addBindValue(id_order);
+
+   if (!query.exec())
+   {
+      QSqlError err = query.lastError();
+      QMessageBox::critical(this, "Ошибка", err.databaseText() + "\n" + err.driverText());
+      db.rollback();
+      return;
+   }
+
+   if (!db.commit())
+   {
+      QMessageBox::critical(this, "Ошибка", "Не удалось изменить статус заказ.");
+      db.rollback();
+      return;
+   }
+   accept();
 }
