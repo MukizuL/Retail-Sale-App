@@ -48,9 +48,6 @@
         <number>0</number>
        </property>
        <item>
-        <widget class="QLineEdit" name="lineEdit_search"/>
-       </item>
-       <item>
         <widget class="QTableView" name="tableView">
          <property name="sizeAdjustPolicy">
           <enum>QAbstractScrollArea::AdjustToContentsOnFirstShow</enum>

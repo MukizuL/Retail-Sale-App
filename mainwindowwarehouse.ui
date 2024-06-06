@@ -18,7 +18,7 @@
     <item>
      <widget class="QTabWidget" name="tabWidget">
       <property name="currentIndex">
-       <number>0</number>
+       <number>1</number>
       </property>
       <widget class="QWidget" name="warehouse_orders">
        <attribute name="title">
@@ -27,9 +27,6 @@
        <layout class="QHBoxLayout" name="horizontalLayout_2">
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_2">
-          <item>
-           <widget class="QLineEdit" name="searchLine_warehouse_orders"/>
-          </item>
           <item>
            <widget class="QTableView" name="tableView_warehouse_orders">
             <property name="midLineWidth">
@@ -59,13 +56,6 @@
         </item>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout">
-          <item>
-           <widget class="QPushButton" name="searchButton_warehouse_orders">
-            <property name="text">
-             <string>Поиск</string>
-            </property>
-           </widget>
-          </item>
           <item>
            <widget class="QPushButton" name="showButton_warehouse_orders">
             <property name="text">
@@ -98,9 +88,6 @@
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_4">
           <item>
-           <widget class="QLineEdit" name="searchLine_warehouse_goods"/>
-          </item>
-          <item>
            <widget class="QTableView" name="tableView_warehouse_goods">
             <property name="sizeAdjustPolicy">
              <enum>QAbstractScrollArea::AdjustToContents</enum>
@@ -123,13 +110,6 @@
         </item>
         <item>
          <layout class="QVBoxLayout" name="verticalLayout_3">
-          <item>
-           <widget class="QPushButton" name="searchButton_warehouse_goods">
-            <property name="text">
-             <string>Поиск</string>
-            </property>
-           </widget>
-          </item>
           <item>
            <widget class="QPushButton" name="inventButton_warehouse_goods">
             <property name="text">
