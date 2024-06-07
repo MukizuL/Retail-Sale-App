@@ -38,7 +38,6 @@ private:
 
    Ui::DialogCreateOrder *ui;
    QSqlDatabase db;
-   QSqlDatabase cart;
    QSqlQueryModel *goods_model;
    QSqlQueryModel *cart_model;
    QVector <int> added_items;

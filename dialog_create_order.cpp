@@ -15,14 +15,6 @@ DialogCreateOrder::DialogCreateOrder(int client, QWidget *parent) :
 
    ui->lineEdit_amount->setValidator(validator_int_goods);
 
-   cart = QSqlDatabase::database("shopcart");
-   if (!cart.isValid())
-   {
-      cart = QSqlDatabase::addDatabase("QSQLITE", "shopcart");
-      cart.setDatabaseName("./cart.db");
-   }
-   cart.open();
-
    goods_model = new QSqlQueryModel;
    cart_model  = new QSqlQueryModel;
 
@@ -47,7 +39,6 @@ DialogCreateOrder::~DialogCreateOrder()
    delete ui;
    delete goods_model;
    delete cart_model;
-   cart.close();
 }
 
 //Add item to cart
@@ -84,9 +75,9 @@ void DialogCreateOrder::on_pushButton_add_clicked()
          return;
       }
 
-      QSqlQuery query(cart);
+      QSqlQuery query(db);
 
-      query.prepare("INSERT INTO Goods (id, Name, Price, Amount, id_client) values (:id, :Name, :Price, :Amount, :id_client)");
+      query.prepare("INSERT INTO Cart (id, Name, Price, Amount, id_client) values (:id, :Name, :Price, :Amount, :id_client)");
       query.bindValue(":id", data[0]);
       query.bindValue(":Name", data[1]);
       query.bindValue(":id_client", id_client);
@@ -116,14 +107,14 @@ void DialogCreateOrder::on_pushButton_add_clicked()
 void DialogCreateOrder::on_pushButton_remove_clicked()
 {
    QVariant  variant;
-   QSqlQuery query(cart);
+   QSqlQuery query(db);
 
    QList <QModelIndex> selected = ui->tableView_shopcart->selectionModel()->selectedRows();
 
    for (auto index : selected)
    {
       variant = cart_model->data(cart_model->index(index.row(), 0));
-      query.prepare("DELETE FROM Goods WHERE id = :id AND id_client = :id_client");
+      query.prepare("DELETE FROM Cart WHERE id = :id AND id_client = :id_client");
       query.bindValue(":id", variant);
       query.bindValue(":id_client", id_client);
 
@@ -146,8 +137,8 @@ void DialogCreateOrder::calculate_total()
    double    discount = 0;
    int       items    = 0; //Unique items count
    QSqlQuery discount_db(db);
-   QSqlQuery query(cart);
-   query.prepare("SELECT Price, Amount FROM Goods WHERE id_client = :id_client");
+   QSqlQuery query(db);
+   query.prepare("SELECT Price, Amount FROM Cart WHERE id_client = :id_client");
    query.bindValue(":id_client", id_client);
 
    if (!query.exec())
@@ -201,11 +192,11 @@ void DialogCreateOrder::update_model_goods()
 
 void DialogCreateOrder::update_model_cart()
 {
-   QSqlQuery query(cart);
+   QSqlQuery query(db);
 
-   query.prepare("SELECT Goods.id, Goods.Name AS 'Название', Goods.price AS 'Цена', "
-                 "Goods.Amount AS 'Количество' "
-                 "FROM Goods WHERE id_client = :id_client ORDER BY Goods.Name");
+   query.prepare("SELECT Cart.id, Cart.Name AS 'Название', Cart.price AS 'Цена', "
+                 "Cart.Amount AS 'Количество' "
+                 "FROM Cart WHERE id_client = :id_client ORDER BY Cart.Name");
    query.bindValue(":id_client", id_client);
 
    if (!query.exec())
@@ -228,7 +219,7 @@ void DialogCreateOrder::on_pushButton_create_clicked()
    QSqlQuery insert_query_items_db(db);
    QSqlQuery update_query_goods_db(db);
    QSqlQuery select_query_goods_db(db);
-   QSqlQuery select_query_cart(cart);
+   QSqlQuery select_query_cart(db);
 
    db.transaction();
 
@@ -247,7 +238,7 @@ void DialogCreateOrder::on_pushButton_create_clicked()
 
    //Get all items from Cart
    int id_order = insert_query_orders_db.lastInsertId().toInt();
-   select_query_cart.prepare("SELECT id, price, amount FROM Goods WHERE id_client = :id_client");
+   select_query_cart.prepare("SELECT id, price, amount FROM Cart WHERE id_client = :id_client");
    select_query_cart.bindValue(":id_client", id_client);
 
    if (!select_query_cart.exec())
@@ -332,8 +323,8 @@ void DialogCreateOrder::on_pushButton_create_clicked()
       return;
    }
    QMessageBox::information(this, "Успех", "Заказ создан и ждёт оплаты");
-   QSqlQuery clean_cart(cart);
-   clean_cart.exec("DELETE FROM Goods WHERE id_client = " + QString::number(id_client) + "");
+   QSqlQuery clean_cart(db);
+   clean_cart.exec("DELETE FROM Cart WHERE id_client = " + QString::number(id_client) + "");
 
    accept();
 }
